@@ -297,7 +297,7 @@ public class CompleteProject extends AppCompatActivity implements View.OnClickLi
                             if(selectedImageUri != null)
                             sendImageToserver(new File(image_path2));
                             else
-                                sendImageToserver(null);
+                                sendImageToserver2();
                         }
                     }
                 });
@@ -615,4 +615,113 @@ public class CompleteProject extends AppCompatActivity implements View.OnClickLi
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
+
+
+
+
+
+
+
+    private void sendImageToserver2(){
+        pDialog = functions.prepareDialog("Updating profile",false);
+        pDialog.show();
+        Ion.with(this)
+                .load(StaticVariables.BASE_URL + "users/self")
+                .setHeader(StaticVariables.USERAGENT, functions.getUserAgent())
+                .setHeader(StaticVariables.DEVICEID, functions.getPhoneID())
+                .setHeader(StaticVariables.COKIE, functions.getCokies())
+                .setMultipartParameter(StaticVariables.DISPLAYNAME, functions.getPref(StaticVariables.DISPLAYNAME, ""))
+                .setMultipartParameter(StaticVariables.FULLNAME, fullName)
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        // do stuff with the result or error
+
+                        try {
+                            pDialog.dismiss();
+
+                            if (result != null) {
+                                System.out.println("----------------------- " + result);
+                                JSONObject json = new JSONObject(result);
+
+                                JSONObject meta = functions.getJsonObject(json, StaticVariables.META);
+
+                                if (meta != null) {
+                                    int code = functions.getInt(meta, StaticVariables.CODE);
+                                    if (code == 200) {
+                                        JSONObject data = functions.getJsonObject(json, StaticVariables.DATA);
+                                        if (data != null) {
+                                            JSONObject user = functions.getJsonObject(data, StaticVariables.USER);
+                                            if (user != null) {
+                                                String instaID = functions.getJsonString(user, StaticVariables.INSTAGRAM_ID);
+                                                String displayName = functions.getJsonString(user, StaticVariables.DISPLAYNAME);
+                                                String locale = functions.getJsonString(user, StaticVariables.LOCALE);
+                                                String country = functions.getJsonString(user, StaticVariables.COUNTRY);
+                                                String email = functions.getJsonString(user, StaticVariables.EMAIL);
+                                                String fullname = functions.getJsonString(user, StaticVariables.FULLNAME);
+                                                String facebookID = functions.getJsonString(user, StaticVariables.FACEBOOKEID);
+                                                String id = functions.getJsonString(user, StaticVariables.ID);
+                                                functions.setPref(StaticVariables.INSTAGRAM_ID, instaID);
+                                                functions.setPref(StaticVariables.DISPLAYNAME, displayName);
+                                                functions.setPref(StaticVariables.LOCALE, locale);
+                                                functions.setPref(StaticVariables.COUNTRY, country);
+                                                functions.setPref(StaticVariables.EMAIL, email);
+                                                functions.setPref(StaticVariables.FULLNAME, fullname);
+                                                functions.setPref(StaticVariables.FACEBOOKEID, facebookID);
+                                                functions.setPref(StaticVariables.ID, id);
+
+                                                JSONObject picture = functions.getJsonObject(user, StaticVariables.PROFILE_PICTURE);
+
+                                                if (picture != null) {
+
+                                                    JSONObject thumbNail = functions.getJsonObject(picture, StaticVariables.THUMBNAIL);
+                                                    if (thumbNail != null) {
+                                                        String thumbURL = functions.getJsonString(thumbNail, StaticVariables.URL);
+                                                        functions.setPref(StaticVariables.THUMBNAIL, thumbURL);
+
+                                                    }
+                                                    JSONObject mrJson = functions.getJsonObject(picture, StaticVariables.MOBILE_RESOLUTION);
+                                                    if (mrJson != null) {
+                                                        String mr = functions.getJsonString(mrJson, StaticVariables.URL);
+                                                        functions.setPref(StaticVariables.MOBILE_RESOLUTION, mr);
+
+                                                    }
+
+
+                                                }
+
+
+                                            }
+
+                                        } else {
+                                            functions.showMessage("Unable to update profile picture");
+                                        }
+
+                                        skipToCat();
+
+
+                                    } else if (code == 403) {
+                                        functions.showMessage(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));
+                                    } else if(code ==  400){
+                                        functions.showMessage(functions.getJsonString(meta, StaticVariables.DEBUG));
+                                    }
+                                } else {
+                                    functions.showMessage("Unable to create account");
+                                }
+
+                            } else {
+                                functions.showMessage("Unable to create account");
+                            }
+
+//                            e.printStackTrace();
+                        } catch (Exception ex) {
+                            // TODO: handle exception
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+    }
+
+
 }

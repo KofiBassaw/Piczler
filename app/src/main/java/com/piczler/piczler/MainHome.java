@@ -165,7 +165,7 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
         functions = new UserFunctions(this);
 
 
-        String projectToken = "sample token here"; // e.g.: "1ef7e30d2a58d27f4b90c42e31d6d7ad"
+       // String projectToken = "sample token here"; // e.g.: "1ef7e30d2a58d27f4b90c42e31d6d7ad"
        // MixpanelAPI mixpanel = MixpanelAPI.getInstance(this, projectToken);
 
 

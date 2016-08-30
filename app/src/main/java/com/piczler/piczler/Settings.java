@@ -86,7 +86,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         tvLocText = (TextView) findViewById(R.id.tvLocText);
 
 
-        changeLoc();
+
 
 
         tvEmail.setText(functions.getPref(StaticVariables.EMAIL, ""));
@@ -172,7 +172,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         {
 
 
-            changeLoc();
+
 
         }
     }

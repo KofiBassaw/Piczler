@@ -1,6 +1,9 @@
 package com.piczler.piczler;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -8,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +47,8 @@ public class InstagramProfile extends Fragment {
 
     SwipyRefreshLayout swipyrefreshlayout;
     TextView tvNoPhotos;
+    int counter = 0;
+    int counterHoold = 0;
     JsonArray images = new JsonArray();
 
     @Override
@@ -60,13 +67,20 @@ public class InstagramProfile extends Fragment {
         swipyrefreshlayout = (SwipyRefreshLayout) theLayout.findViewById(R.id.swipyrefreshlayout);
         detail = new ArrayList<>();
 
-        swipyrefreshlayout.setEnabled(false);
+       // swipyrefreshlayout.setEnabled(false);
         //fab_button = (FloatingActionButton) theLayout.findViewById(R.id.fab_button);
         //  fab_button.attachToRecyclerView(recyclerView);
         initRecyclerView();
 
 
-
+        swipyrefreshlayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                Log.d("MainActivity", "Refresh triggered at "
+                        + (direction == SwipyRefreshLayoutDirection.TOP ? "top" : "bottom"));
+                getInstaPictures();
+            }
+        });
         if(functions.getPref(StaticVariables.INSTAUPDATED,false))
         {
 
@@ -123,12 +137,13 @@ public class InstagramProfile extends Fragment {
 
             //
             Ion.with(this)
-                    .load("GET", "https://api.instagram.com/v1/users/self/media/recent?access_token="+functions.getPref(StaticVariables.INSTAACCESSTOKEN,""))
+                    .load("GET", "https://api.instagram.com/v1/users/self/media/recent?access_token="+functions.getPref(StaticVariables.INSTAACCESSTOKEN,"")+"&count="+(counter+20))
                             .asString()
                             .setCallback(new FutureCallback<String>() {
                                 @Override
                                 public void onCompleted(Exception e, String result) {
                                     try {
+                                        swipyrefreshlayout.setRefreshing(false);
                                         if (e != null) {
                                             e.printStackTrace();
                                             System.out.println("---------------------------------- error");
@@ -139,16 +154,32 @@ public class InstagramProfile extends Fragment {
                                         if (result != null) {
 
 
-                                            media = result;
-                                            Database db = new Database(getActivity());
-                                            db.open();
-                                            db.insertSampleDetails(functions.getPref(StaticVariables.ID, ""), StaticVariables.INSTAGRAMPICS, media);
-                                            db.close();
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                                                new BindAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, media);
-                                            } else {
-                                                new BindAsync().execute(media);
+                                           media = result;
+
+                                            if(counterHoold == 0)
+                                            {
+                                                Database db = new Database(getActivity());
+                                                db.open();
+                                                db.insertSampleDetails(functions.getPref(StaticVariables.ID, ""), StaticVariables.INSTAGRAMPICS, media);
+                                                db.close();
                                             }
+
+
+                                            JSONObject json = new JSONObject(result);
+                                            JSONArray data = functions.getJsonArray(json,StaticVariables.DATA);
+
+
+                                            if(data.length()>detail.size())
+                                            {
+                                                counterHoold = counter;
+                                                counter += 20;
+                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                                                    new BindAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, media);
+                                                } else {
+                                                    new BindAsync().execute(media);
+                                                }
+                                            }
+
 
                                         } else {
                                             resendToken("Unable to retrieve access token");
@@ -256,8 +287,15 @@ public class InstagramProfile extends Fragment {
 
                 pbBar.setVisibility(View.GONE);
                 System.out.println("bbbbbbbb: hmmmmmmm");
+
+            if(counterHoold == 0)
+            {
                 recyclerAdapter = new PictureAdapter(detail,getActivity());
                 recyclerView.setAdapter(recyclerAdapter);
+            }else {
+                recyclerAdapter.notifyDataSetChanged();
+            }
+
 
                if(detail.size() == 0)
                {
@@ -289,13 +327,17 @@ public class InstagramProfile extends Fragment {
             JSONObject json = new JSONObject(jsonObject);
             GettersAndSetters Details;
             JSONArray data = functions.getJsonArray(json,StaticVariables.DATA);
-            ArrayList<GettersAndSetters> detailed = new ArrayList<>();
-            JsonArray imeger = new JsonArray();
 
             if(data!=null)
             {
+
+                if(counterHoold == 0)
+                {
+                    images = new JsonArray();
+                    detail = new ArrayList<>();
+                }
                 //StaticVariables.instaMag = new ArrayList<>();
-                for(int i=0; i<data.length(); i++)
+                for(int i=counterHoold; i<data.length(); i++)
                 {
                     JSONObject onPhoto = data.getJSONObject(i);
                     JSONObject imagesImage = functions.getJsonObject(onPhoto,"images");
@@ -314,13 +356,13 @@ public class InstagramProfile extends Fragment {
                             String standardUrlString = functions.getJsonString(standard, StaticVariables.URL);
                             JsonObject add = new JsonObject();
                             add.addProperty(StaticVariables.URL, standardUrlString);
-                            detailed.add(Details);
+                            detail.add(Details);
                             Details.setSelected(false);
                           //  StaticVariables.instaMag.add(Details);
                             StaticVariables.piczlerMag.put(standardUrlString, "" + 0);
 
 
-                            imeger.add(add);
+                            images.add(add);
                         }
 
 
@@ -330,11 +372,9 @@ public class InstagramProfile extends Fragment {
 
 
                 }
-                images = new JsonArray();
-                detail = new ArrayList<>();
 
-                images = imeger;
-                detail = detailed;
+
+
             }
 
         }catch (Exception ex)
@@ -343,4 +383,47 @@ public class InstagramProfile extends Fragment {
         }
     }
 
+
+
+
+
+
+    @Override
+    public void onResume() {
+        getActivity().registerReceiver(mHandleMessageReceiver, new IntentFilter(
+                StaticVariables.RELOADIMAGES));
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        try {
+            getActivity().unregisterReceiver(mHandleMessageReceiver);
+        } catch (Exception e) {
+            Log.e("rror", "> " + e.getMessage());
+        }
+        super.onDestroy();
+    }
+
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+
+            String type = intent.getStringExtra(StaticVariables.TYPE);
+          if(type.contentEquals("shift"))
+            {
+
+                int i = intent.getExtras().getInt("i");
+                System.out.println("bbbbbb: status "+i);
+                if (i == 1) {
+                    swipyrefreshlayout.setEnabled(true);
+                } else {
+                    swipyrefreshlayout.setEnabled(false);
+                }
+
+            }
+
+        }
+    };
 }

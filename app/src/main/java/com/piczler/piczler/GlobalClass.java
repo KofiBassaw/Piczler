@@ -583,6 +583,44 @@ public class GlobalClass extends Application {
     private void sendGcm(String token)
     {
 
+
+        Ion.with(this)
+                .load(StaticVariables.BASE_URL + "users/push")
+                .setHeader(StaticVariables.USERAGENT, functions.getUserAgent())
+                .setHeader(StaticVariables.DEVICEID, functions.getPhoneID())
+                .setHeader(StaticVariables.COKIE, functions.getCokies())
+                .setBodyParameter("push_token",token)
+                .asString()
+                .setCallback(new FutureCallback<String>() {
+                    @Override
+                    public void onCompleted(Exception e, String result) {
+                        // do stuff with the result or error
+
+                        try {
+
+                            if (result != null) {
+                                System.out.println("----------------------- " + result);
+                                JSONObject json = new JSONObject(result);
+
+                                JSONObject meta = functions.getJsonObject(json, StaticVariables.META);
+
+                                if (meta != null) {
+                                    int code = functions.getInt(meta, StaticVariables.CODE);
+                                    if (code == 200) {
+                                       functions.setPref(StaticVariables.HASGCM,true);
+
+
+                                    }
+                                }
+                            }
+
+//                            e.printStackTrace();
+                        } catch (Exception ex) {
+                            // TODO: handle exception
+                            ex.printStackTrace();
+                        }
+                    }
+                });
     }
 
 

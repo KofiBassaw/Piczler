@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.andexert.library.RippleView;
@@ -258,6 +259,7 @@ public class SocialPictures extends AppCompatActivity implements View.OnClickLis
         ImageView view;
         int position;
         UserFunctions function;
+        ProgressBar pbBarImage;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -267,6 +269,7 @@ public class SocialPictures extends AppCompatActivity implements View.OnClickLis
             View theLayout = inflater.inflate(
                     R.layout.image_layout, container, false);
             view = (ImageView) theLayout.findViewById(R.id.ivImage);
+            pbBarImage = (ProgressBar) theLayout.findViewById(R.id.pbBarImage);
 
             position = getArguments().getInt("pos");
             function = new UserFunctions(getActivity());
@@ -286,11 +289,12 @@ public class SocialPictures extends AppCompatActivity implements View.OnClickLis
 
                         aq.id(view).image(jsonString, op);
 
-
                 aq.id(view).image(jsonString, false, true, 2000, 0, new BitmapAjaxCallback() {
 
                     @Override
                     public void callback(String url, ImageView iv, Bitmap bm, AjaxStatus status) {
+
+                        pbBarImage.setVisibility(View.VISIBLE);
 
                    if(bm != null)
                    {

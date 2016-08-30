@@ -132,7 +132,7 @@ public class StaticVariables {
     public static final String CLIENT_ID = "your client id";
     public static final String CLIENT_SECRET = "your client secret";
     public static final String CALLBACK_URL = "redirect uri here";
-    public static final String MIXPANEL_TOKEN = "";
+    public static final String MIXPANEL_TOKEN = "0eb20fc6a32ebc013e3126243e1e823a";
 
 
 
