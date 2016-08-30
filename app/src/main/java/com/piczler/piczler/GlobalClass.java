@@ -78,6 +78,7 @@ public class GlobalClass extends Application {
             getNotification();
 
 
+            System.out.println("llllllllllll: "+functions.getPref(StaticVariables.GCM,""));
 
             if(!functions.getPref(StaticVariables.HASGCM,false))
             {

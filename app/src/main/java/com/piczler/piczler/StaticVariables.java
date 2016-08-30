@@ -114,6 +114,7 @@ public class StaticVariables {
     public static final String HASLOCATION = "haslocation";
     public static final String LOCATIONCOMMASEPERATED = "locationComma";
     public static final String COUNTRYCODE = "country_code";
+    public static final String LOCATIONMAESSEPERATED = "locNameSeperated";
 
     public static final Double APP_VERSION = 1.0;
     public static final int SUCCESS_CODE = 200;

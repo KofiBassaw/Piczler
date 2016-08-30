@@ -294,7 +294,7 @@ public class SocialPictures extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void callback(String url, ImageView iv, Bitmap bm, AjaxStatus status) {
 
-                        pbBarImage.setVisibility(View.VISIBLE);
+                        pbBarImage.setVisibility(View.GONE);
 
                    if(bm != null)
                    {

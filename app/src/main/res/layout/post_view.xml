@@ -24,7 +24,7 @@
                 style="@style/TextAppearance.AppCompat.Display1"
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
-                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
                 android:id="@+id/tvQuestionNum"/>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>

@@ -124,6 +124,8 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         }
 
         cbFacebook.setOnClickListener(this);
+
+        changeLoc();
     }
 
     @Override
@@ -147,6 +149,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             hasUnblocked = true;
         }else if(requestCode == LOCATIONCHANGED && resultCode == RESULT_OK)
         {
+            changeLoc();
             hasUnblocked = true;
             Intent it = new Intent("com.piczler.piczler.broadcast");
             it.putExtra("type","bindStaffs");
@@ -168,12 +171,6 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         }else if(requestCode == FACEBOOKINTENT && resultCode != RESULT_OK)
         {
             cbFacebook.setChecked(false);
-        }else if(requestCode == LOCATIONCHANGED && resultCode != RESULT_OK)
-        {
-
-
-
-
         }
     }
 
@@ -182,7 +179,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     {
 
         boolean  locationMonitor =  functions.getPref(StaticVariables.HASLOCATION,false);
-        String  locComma =  functions.getPref(StaticVariables.LOCATIONCOMMASEPERATED,"");
+        String  locComma =  functions.getPref(StaticVariables.LOCATIONMAESSEPERATED,"");
         if(locationMonitor)
         {
             tvLocText.setText(locComma);

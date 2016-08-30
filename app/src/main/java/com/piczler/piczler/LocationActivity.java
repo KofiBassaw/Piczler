@@ -44,6 +44,7 @@ SwitchCompat switch_compat;
 
     boolean locationMonitor = false;
     String locComma = "";
+    String locText = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -228,9 +229,11 @@ SwitchCompat switch_compat;
     @Override
     public void onBackPressed() {
         String locationSeperated = "";
+        String names = "";
         if(!functions.getPref(StaticVariables.HASLOCATION,false))
         {
            functions.setPref(StaticVariables.LOCATIONCOMMASEPERATED, "");
+            functions.setPref(StaticVariables.LOCATIONMAESSEPERATED,"");
         }else
         {
 
@@ -241,10 +244,13 @@ SwitchCompat switch_compat;
                 if(Details.selected)
                 {
 
-                    if(locationSeperated.length()>0)
-                        locationSeperated+=",";
+                    if(locationSeperated.length()>0) {
+                        locationSeperated += ",";
+                        names += ",";
+                    }
 
                     locationSeperated+=Details.code;
+                    names+=Details.name;
                 }
 
 
@@ -252,6 +258,7 @@ SwitchCompat switch_compat;
             if(locationSeperated.length()>0)
                 locationSeperated+=",";
             functions.setPref(StaticVariables.LOCATIONCOMMASEPERATED,locationSeperated);
+            functions.setPref(StaticVariables.LOCATIONMAESSEPERATED,names);
         }
 
         System.out.println("bbbbbbbb: locationMonitor: "+locationMonitor+"   HASLOCATION: "+functions.getPref(StaticVariables.HASLOCATION,false));

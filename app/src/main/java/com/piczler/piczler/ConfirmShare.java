@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -374,13 +375,27 @@ public class ConfirmShare extends AppCompatActivity implements View.OnClickListe
 
     public String getRealPathFromURI(Uri contentUri) {
 
-        // can post image
-        String[] proj={MediaStore.Images.Media.DATA};
-        Cursor cursor =getContentResolver().query(contentUri, proj, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
+        try
+        {
+            // can post image
+            String[] proj={MediaStore.Images.Media.DATA};
+            Cursor cursor =getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
 
-        return cursor.getString(column_index);
+            return cursor.getString(column_index);
+
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+
+
+            String fullPath = RealPathUtil.getPath(this,contentUri) ;
+            return  fullPath;
+        }
+
+
+
     }
 
     @Override
