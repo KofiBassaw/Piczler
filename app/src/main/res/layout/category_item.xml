@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:id="@+id/ivBackground"/>
+
+
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#68000000"></LinearLayout>
+
+    <com.andexert.library.RippleView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        card_view:rv_color="@android:color/white"
+        card_view:rv_centered="true"
+        card_view:rv_rippleDuration="200"
+        android:id="@+id/rpMain"
+        android:layout_centerHorizontal="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rlmain">
+
+
+        </RelativeLayout>
+
+    </com.andexert.library.RippleView>
+
+   <RelativeLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:layout_centerVertical="true">
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="CATEGPORIES"
+           style="@style/TextAppearance.AppCompat.Display1"
+           android:textSize="16sp"
+           android:textColor="@android:color/white"
+           android:layout_centerHorizontal="true"
+           android:layout_marginBottom="10dp"
+           android:id="@+id/tvName"/>
+
+       <com.andexert.library.RippleView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           card_view:rv_color="@android:color/white"
+           card_view:rv_centered="true"
+           card_view:rv_rippleDuration="200"
+           android:layout_below="@+id/tvName"
+           android:id="@+id/rpFollow"
+           android:layout_centerHorizontal="true">
+           <RelativeLayout
+               android:layout_width="120dp"
+               android:layout_height="30dp"
+               android:id="@+id/rlFollow">
+
+               <RelativeLayout
+                   android:layout_width="120dp"
+                   android:layout_height="30dp"
+                   android:id="@+id/rlTransparent"
+                   android:background="@drawable/my_transp">
+                   <TextView
+                       android:id="@+id/tvTransparent"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Follow"
+                       style="@style/TextAppearance.AppCompat.Display1"
+                       android:textSize="15sp"
+                       android:textColor="@android:color/white"
+                       android:layout_centerHorizontal="true"
+                       android:layout_centerInParent="true"/>
+               </RelativeLayout>
+
+               <RelativeLayout
+                   android:layout_width="120dp"
+                   android:layout_height="30dp"
+                   android:id="@+id/rlGreen"
+                   android:background="@drawable/my_transp_green"
+                   android:visibility="gone">
+                   <TextView
+                       android:id="@+id/tvGreen"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="Following"
+                       style="@style/TextAppearance.AppCompat.Display1"
+                       android:textSize="15sp"
+                       android:textColor="@android:color/white"
+                       android:layout_centerHorizontal="true"
+                       android:layout_centerInParent="true"/>
+               </RelativeLayout>
+
+
+
+               <com.trncic.library.DottedProgressBar
+                   android:id="@+id/progress"
+                   android:layout_width="34dp"
+                   android:layout_height="0dp"
+                   android:padding="2dp"
+                   card_view:activeDot="@drawable/myovalgreen"
+                   card_view:dotSize="8dp"
+                   card_view:inactiveDot="@drawable/myovalwhite"
+                   card_view:jumpingSpeed="670"
+                   card_view:spacing="2dp"
+                   android:layout_centerInParent="true"
+                   android:visibility="gone"/>
+           </RelativeLayout>
+
+       </com.andexert.library.RippleView>
+   </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>

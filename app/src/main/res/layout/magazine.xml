@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        card_view:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        card_view:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="ORDER MAGAZINE"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
+
+
+    ​
+    <android.support.design.widget.TabLayout
+        android:id="@+id/materialup.tabs"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:tabSelectedTextColor="?android:attr/textColorPrimaryInverse"
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabIndicatorHeight="4dp"
+        android:background="@android:color/white" />
+
+
+    <!-- The top margin value equals half height of the blue box -->
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</LinearLayout>

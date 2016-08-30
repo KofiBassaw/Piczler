@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        card_view:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        card_view:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="POST"
+                style="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:layout_centerInParent="true"
+                android:id="@+id/tvQuestionNum"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+               android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:id="@+id/ivImages"/>
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:layout_marginBottom="20dp">
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="3"
+                    android:maxLines="4"
+                    android:background="@android:color/transparent"
+                    android:hint="Tell us a story..."
+                    android:textColorHint="#cccccc"
+                    android:id="@+id/etCaption"
+                    android:padding="10dp"
+                    android:gravity="top"
+                    android:paddingLeft="10dp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="ADD CATEGORY"
+    android:layout_margin="10dp"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                android:padding="10dp">
+
+
+
+
+<!--
+                <com.piczler.piczler.TagListView
+                    android:id="@+id/tagview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:background="#fff"
+                    android:padding="5dp"
+                    taglist:horizontal_spacing="3dp"
+                    taglist:vertical_spacing="5dp" />
+        -->
+
+
+
+                <com.cunoraz.tagview.TagView
+                    android:id="@+id/tag_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

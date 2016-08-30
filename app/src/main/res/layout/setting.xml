@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        card_view:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        card_view:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Settings"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:orientation="vertical">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Account"
+             android:textColor="#009b82"
+             android:layout_marginLeft="18dp"
+             android:layout_marginTop="18dp"
+             android:textSize="14sp"/>
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="18dp"
+             android:layout_marginRight="18dp"
+             android:minHeight="60dp">
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="vertical"
+                 android:layout_centerVertical="true">
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textSize="16sp"
+                     android:textColor="#1d1d1d"
+                     android:text="Email"/>
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textSize="14sp"
+                     android:textColor="#6b6b6b"
+                     android:layout_marginTop="2dp"
+                     android:id="@+id/tvEmail"
+                     android:text="matkofbass@gmail.com"/>
+             </LinearLayout>
+         </RelativeLayout>
+
+         <View
+             android:layout_marginLeft="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_width="match_parent"
+             android:layout_height="0.5dp"
+             android:background="#c5c5c5"/>
+
+         <com.andexert.library.RippleView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@color/colorPrimary"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:id="@+id/rpEditProfile"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:minHeight="60dp"
+                 android:id="@+id/rlEditProfile">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#1d1d1d"
+                         android:text="Edit Profile"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="14sp"
+                         android:textColor="#6b6b6b"
+                         android:layout_marginTop="2dp"
+                         android:text="Set your display picture and name"/>
+                 </LinearLayout>
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+
+
+         <View
+             android:layout_marginLeft="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_width="match_parent"
+             android:layout_height="0.5dp"
+             android:background="#c5c5c5"/>
+
+
+
+         <com.andexert.library.RippleView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@color/colorPrimary"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:id="@+id/rpTellFriend"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:id="@+id/rlTellFriend"
+                 android:minHeight="60dp">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#1d1d1d"
+                         android:text="Tell a friend"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="14sp"
+                         android:textColor="#6b6b6b"
+                         android:layout_marginTop="2dp"
+                         android:text="Invite your friends to piczler"/>
+                 </LinearLayout>
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+
+         <View
+             android:layout_marginLeft="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_width="match_parent"
+             android:layout_height="0.5dp"
+             android:background="#c5c5c5"/>
+
+
+         <com.andexert.library.RippleView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@color/colorPrimary"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:id="@+id/rpBlocked"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:id="@+id/rlBlocked"
+                 android:minHeight="60dp">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#1d1d1d"
+                         android:text="Blocked"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="14sp"
+                         android:textColor="#6b6b6b"
+                         android:layout_marginTop="2dp"
+                         android:text="Unblock your blocked users"/>
+                 </LinearLayout>
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+
+         <View
+             android:layout_marginLeft="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_width="match_parent"
+             android:layout_height="0.5dp"
+             android:background="#c5c5c5"/>
+
+
+         <com.andexert.library.RippleView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@color/colorPrimary"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:id="@+id/rpLocation"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:id="@+id/rlLocation"
+                 android:minHeight="60dp">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#1d1d1d"
+                         android:text="Location"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="14sp"
+                         android:textColor="#6b6b6b"
+                         android:layout_marginTop="2dp"
+                         android:text="Global"/>
+                 </LinearLayout>
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+
+
+         <View
+             android:layout_marginLeft="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_width="match_parent"
+             android:layout_height="0.5dp"
+             android:background="#c5c5c5"/>
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Connect Media"
+             android:textColor="#009b82"
+             android:layout_marginLeft="18dp"
+             android:layout_marginTop="18dp"
+             android:textSize="14sp"/>
+
+         <com.andexert.library.RippleView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@android:color/white"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:id="@+id/rpFaceBook"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:minHeight="60dp">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_toLeftOf="@+id/cbFacebook"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#1d1d1d"
+                         android:text="Facebook"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="14sp"
+                         android:textColor="#6b6b6b"
+                         android:layout_marginTop="2dp"
+                         android:text="Connect your facebook account"/>
+                 </LinearLayout>
+
+                 <CheckBox
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentRight="true"
+                     android:layout_centerVertical="true"
+                     android:id="@+id/cbFacebook"/>
+
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+
+
+         <View
+             android:layout_marginLeft="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_width="match_parent"
+             android:layout_height="0.5dp"
+             android:background="#c5c5c5"/>
+
+         <com.andexert.library.RippleView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@android:color/white"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:id="@+id/rpInstagram"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:minHeight="60dp">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_toLeftOf="@+id/cbInstagram"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#1d1d1d"
+                         android:text="Instagram"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="14sp"
+                         android:textColor="#6b6b6b"
+                         android:layout_marginTop="2dp"
+                         android:text="Connect with your instagram account"/>
+                 </LinearLayout>
+
+                 <CheckBox
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentRight="true"
+                     android:layout_centerVertical="true"
+                     android:id="@+id/cbInstagram"/>
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Support"
+             android:textColor="#009b82"
+             android:layout_marginLeft="18dp"
+             android:layout_marginTop="18dp"
+             android:textSize="14sp"/>
+
+
+         <com.andexert.library.RippleView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@color/colorPrimary"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:id="@+id/rpHelp"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:id="@+id/rlHelp"
+                 android:minHeight="60dp">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#1d1d1d"
+                         android:text="Help"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="14sp"
+                         android:textColor="#6b6b6b"
+                         android:layout_marginTop="2dp"
+                         android:text="Frequently ask questions"/>
+                 </LinearLayout>
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+         <View
+             android:layout_marginLeft="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_width="match_parent"
+             android:layout_height="0.5dp"
+             android:background="#c5c5c5"/>
+
+         <com.andexert.library.RippleView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@color/colorPrimary"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:id="@+id/rpLegal"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:minHeight="60dp"
+                 android:id="@+id/rlLegal">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#1d1d1d"
+                         android:text="@string/legal"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="14sp"
+                         android:textColor="#6b6b6b"
+                         android:layout_marginTop="2dp"
+                         android:text="Terms of service and privacy policy"/>
+                 </LinearLayout>
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+         <View
+             android:layout_marginLeft="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_width="match_parent"
+             android:layout_height="0.5dp"
+             android:background="#c5c5c5"/>
+
+         <com.andexert.library.RippleView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@android:color/white"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:id="@+id/rpVersion"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:minHeight="60dp">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#1d1d1d"
+                         android:text="App Version"/>
+
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="14sp"
+                         android:textColor="#6b6b6b"
+                         android:layout_marginTop="2dp"
+                         android:text="1.12"/>
+                 </LinearLayout>
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+
+
+
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text=""
+             android:textColor="#009b82"
+             android:layout_marginLeft="8dp"
+             android:layout_marginTop="8dp"
+             android:textSize="14sp"/>
+         <View
+             android:layout_marginLeft="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_width="match_parent"
+             android:layout_height="0.5dp"
+             android:background="#c5c5c5"/>
+
+         <com.andexert.library.RippleView
+             android:id="@+id/rpLogout"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             card_view:rv_color="@color/colorPrimary"
+             card_view:rv_centered="true"
+             card_view:rv_rippleDuration="200"
+             android:layout_centerHorizontal="true">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="18dp"
+                 android:layout_marginRight="18dp"
+                 android:minHeight="60dp"
+                 android:id="@+id/rlLogout">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     android:layout_centerVertical="true">
+                     <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:textSize="16sp"
+                         android:textColor="#ff272f"
+                         android:text="Logout"/>
+
+
+                 </LinearLayout>
+             </RelativeLayout>
+         </com.andexert.library.RippleView>
+
+
+     </LinearLayout>
+    </ScrollView>
+</LinearLayout>

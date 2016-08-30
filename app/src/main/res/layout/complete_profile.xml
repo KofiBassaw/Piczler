@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:background="@drawable/loginbackground"
+       xmlns:card_view="http://schemas.android.com/apk/res-auto">
+       <RelativeLayout
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent"
+           android:layout_above="@+id/rlYourName">
+           <android.support.v7.widget.Toolbar
+               android:id="@+id/toolbar2"
+               android:visibility="gone"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="@android:color/transparent"
+               card_view:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+               card_view:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+               <RelativeLayout
+                   android:layout_width="fill_parent"
+                   android:layout_height="fill_parent">
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_centerVertical="true"
+                       android:text="Update Profile"
+                       android:textStyle="bold"
+                       android:textColor="@android:color/white"
+                       android:textSize="16sp"/>
+               </RelativeLayout>
+           </android.support.v7.widget.Toolbar>
+           <LinearLayout
+               android:layout_below="@+id/toolbar2"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical"
+               android:layout_centerVertical="true">
+
+
+
+
+
+               <TextView
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:gravity="center_horizontal"
+                   android:text="@string/take_time"
+                   android:layout_marginBottom="10dp"
+                   android:textStyle="bold"
+                   android:id="@+id/tvtkTimeTitle"
+                   android:textColor="@android:color/white"
+                   android:textSize="18sp"/>
+
+
+
+
+
+
+               <View
+                   android:layout_width="fill_parent"
+                   android:layout_height="20dp"/>
+
+               <com.andexert.library.RippleView
+                   android:id="@+id/rpMyOval"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   card_view:rv_color="@color/colorPrimary"
+                   card_view:rv_centered="true"
+                   card_view:rv_rippleDuration="200"
+                   android:layout_margin="2dp"
+                   android:layout_gravity="center_horizontal">
+
+                   <RelativeLayout
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:id="@+id/rlMyOval"
+                       >
+                       <RelativeLayout
+                           android:layout_width="120dp"
+                           android:layout_height="120dp"
+                           android:id="@+id/rloverContainer"
+                           android:background="@drawable/myovalwhite">
+                           <TextView
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:textSize="16sp"
+                               android:text="@string/add_photo"
+                               android:gravity="center"
+                               android:layout_centerInParent="true"
+                              />
+                       </RelativeLayout>
+
+
+                       <de.hdodenhof.circleimageview.CircleImageView
+                           android:layout_width="120dp"
+                           android:layout_height="120dp"
+                           android:id="@+id/ivProfile"
+                           android:visibility="gone"/>
+
+
+                   </RelativeLayout>
+               </com.andexert.library.RippleView>
+
+               <com.andexert.library.RippleView
+                   android:id="@+id/rpAdd"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   card_view:rv_color="@color/colorPrimary"
+                   card_view:rv_centered="true"
+                   card_view:rv_rippleDuration="200"
+                   android:layout_marginLeft="20dp"
+                   android:layout_marginRight="20dp"
+                   android:layout_marginBottom="10dp"
+                   android:visibility="gone">
+                   <RelativeLayout
+                       android:layout_width="fill_parent"
+                       android:layout_height="wrap_content"
+                       android:minHeight="20dp"
+                       android:id="@+id/rlAdd">
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="change photo"
+                           android:textColor="@android:color/white"
+                           android:textSize="16sp"
+                           android:layout_centerInParent="true"/>
+                   </RelativeLayout>
+
+               </com.andexert.library.RippleView>
+           </LinearLayout>
+       </RelativeLayout>
+
+       <RelativeLayout
+           android:id="@+id/rlYourName"
+           android:layout_width="fill_parent"
+           android:layout_height="55dp"
+           android:background="@android:color/white"
+           android:layout_centerVertical="true">
+           <EditText
+               android:layout_width="fill_parent"
+               android:layout_height="40dp"
+               android:background="@android:color/transparent"
+               android:hint="Enter your Name"
+               android:paddingLeft="10dp"
+               android:gravity="center"
+               android:inputType="textEmailAddress"
+               android:id="@+id/etCompleteProfile"
+               android:layout_centerVertical="true"/>
+       </RelativeLayout>
+
+       <LinearLayout
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent"
+           android:orientation="vertical"
+           android:layout_below="@+id/rlYourName">
+           <com.andexert.library.RippleView
+               android:layout_marginLeft="20dp"
+               android:layout_marginRight="20dp"
+               android:id="@+id/rpComplet"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="20dp"
+               card_view:rv_color="@android:color/white"
+               card_view:rv_centered="true"
+               card_view:rv_rippleDuration="200">
+               <RelativeLayout
+                   android:layout_width="fill_parent"
+                   android:layout_height="50dp     "
+                   android:layout_weight="50"
+                   android:background="@color/complete_profile"
+                   android:id="@+id/rlComplet">
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_centerInParent="true"
+                       android:textSize="14sp"
+                       android:id="@+id/etStatus"
+                       android:text="COMPLETE PROFILE"
+                       android:textColor="@android:color/white"/>
+               </RelativeLayout>
+           </com.andexert.library.RippleView>
+           <com.andexert.library.RippleView
+               android:id="@+id/rpSkip"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               card_view:rv_color="@color/colorPrimary"
+               card_view:rv_centered="true"
+               card_view:rv_rippleDuration="200"
+               android:layout_marginTop="20dp"
+               android:layout_marginLeft="20dp"
+               android:layout_marginRight="20dp">
+               <RelativeLayout
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:minHeight="60dp"
+                   android:id="@+id/rlSkip">
+
+                   <TextView
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="skip"
+                       android:textColor="@android:color/white"
+                       android:textSize="20sp"
+                       android:layout_centerInParent="true"/>
+               </RelativeLayout>
+
+           </com.andexert.library.RippleView>
+       </LinearLayout>
+   </RelativeLayout>
+

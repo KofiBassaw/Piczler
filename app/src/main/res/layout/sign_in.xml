@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        card_view:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        card_view:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+      <RelativeLayout
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent">
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerVertical="true"
+              android:text="WELCOME"
+              android:textStyle="bold"
+              android:textColor="@android:color/white"
+              android:textSize="16sp"/>
+      </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="60dp"
+    android:background="@android:color/white"
+    android:layout_marginTop="30dp">
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@android:color/transparent"
+        android:hint="email"
+        android:paddingLeft="10dp"
+        android:id="@+id/etEmail"
+        android:inputType="textEmailAddress"
+        android:layout_centerVertical="true"/>
+</RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#cccccc"></LinearLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="@android:color/white">
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:hint="password"
+            android:id="@+id/etPassword"
+            android:paddingLeft="10dp"
+            android:inputType="textPassword"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/cvLogin"/>
+
+
+
+
+
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/my_transp_login"
+                android:id="@+id/cvLogin">
+
+
+                <com.andexert.library.RippleView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    card_view:rv_color="@color/colorPrimary"
+                    card_view:rv_centered="true"
+                    card_view:rv_rippleDuration="200"
+                    android:id="@+id/rpLogin"
+                    android:layout_margin="2dp">
+                    <RelativeLayout
+                        android:layout_width="60dp"
+                        android:layout_height="25dp"
+                        android:id="@+id/rlLogin"
+                        android:background="@android:color/white">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:textSize="12sp"
+                            android:text="LOGIN"
+                            android:textColor="@color/loginBlue"/>
+                    </RelativeLayout>
+                </com.andexert.library.RippleView>
+            </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+    <com.andexert.library.RippleView
+        android:id="@+id/rpForgot"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        card_view:rv_color="@color/colorPrimary"
+        card_view:rv_centered="true"
+        card_view:rv_rippleDuration="200"
+        android:layout_margin="2dp">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="60dp"
+            android:id="@+id/rlForgot">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password?"
+                android:textColor="#fe868686"
+                android:textSize="18sp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+    </com.andexert.library.RippleView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#fe868686"
+            android:layout_weight="50"></LinearLayout>
+
+        <RelativeLayout
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="80">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="or"
+                android:textColor="#fe868686"
+                android:textSize="25sp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#fe868686"
+            android:layout_weight="50"></LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <com.andexert.library.RippleView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/rpFacebook"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        card_view:rv_color="@android:color/white"
+        card_view:rv_centered="true"
+        card_view:rv_rippleDuration="200">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp     "
+            android:layout_weight="50"
+            android:background="@color/signFacebook"
+            android:id="@+id/rlFaceBook">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="14sp"
+                android:text="CONTINUE WITH FACEBOOK"
+                android:textColor="@android:color/white"/>
+        </RelativeLayout>
+    </com.andexert.library.RippleView>
+
+
+    <com.andexert.library.RippleView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/rpEmail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        card_view:rv_color="@android:color/white"
+        card_view:rv_centered="true"
+        card_view:rv_rippleDuration="200">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp     "
+            android:layout_weight="50"
+            android:background="@color/signEmail"
+            android:id="@+id/rlEmail">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="14sp"
+                android:text="SIGN UP WITH EMAIL"
+                android:textColor="@android:color/white"/>
+        </RelativeLayout>
+    </com.andexert.library.RippleView>
+</LinearLayout>

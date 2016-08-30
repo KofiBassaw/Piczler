@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Piczler</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="add_photo">add\nphoto</string>
+    <string name="facebook_app_id">1646601195598029</string>
+    <string name="take_time">Let\'s take some time to\nknow you</string>
+    <string name="legal">Legal &amp; Privacy</string>
+</resources>

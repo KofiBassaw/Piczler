@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/cvBuy"
+    android:minWidth="500dp"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Order Magazine"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="15dp"
+    android:textSize="18sp"
+    android:textColor="#454444"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter magazine Name"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="2dp"
+        android:textSize="14sp"
+        android:textColor="#7d7c7c"/>
+
+
+
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginRight="40dp"
+        android:inputType="text"
+        android:hint="Name"
+        android:id="@+id/etPincode"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="40dp"/>
+
+
+
+    <com.andexert.library.RippleView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        card_view:rv_color="@color/colorPrimary"
+        card_view:rv_centered="true"
+        card_view:rv_rippleDuration="200"
+        android:id="@+id/rpContinue"
+        android:layout_marginTop="15dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:id="@+id/rlContinue">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="18sp"
+                android:text="OK"
+                android:id="@+id/tvContinue"
+                android:textColor="@color/colorPrimary"/>
+        </RelativeLayout>
+    </com.andexert.library.RippleView>
+
+</LinearLayout>

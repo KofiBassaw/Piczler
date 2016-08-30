@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:background="#f9b466">
+
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="tap to record"
+            android:layout_marginBottom="20dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:id="@+id/tvTitle"
+            android:textStyle="bold"/>
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/tvTitle">
+
+           <ImageView
+               android:layout_centerVertical="true"
+               android:id="@+id/ivCancel"
+               android:layout_width="40dp"
+               android:layout_height="40dp"
+               android:src="@drawable/audio_cancel"/>
+
+
+
+
+           <com.andexert.library.RippleView
+               android:layout_centerHorizontal="true"
+               android:id="@+id/rpRecord"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               card_view:rv_color="@android:color/white"
+               card_view:rv_centered="true"
+               card_view:rv_rippleDuration="100">
+               <RelativeLayout
+                   android:layout_width="80dp"
+                   android:layout_height="80dp"
+                   android:background="@drawable/myovalrecord"
+                   android:id="@+id/rlRecord">
+
+                   <ImageView
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+                       android:layout_centerInParent="true"
+                       android:src="@drawable/audio_record"
+                       android:id="@+id/ivRecord"/>
+               </RelativeLayout>
+           </com.andexert.library.RippleView>
+
+
+
+
+           <com.andexert.library.RippleView
+               android:layout_centerHorizontal="true"
+               android:id="@+id/rpPlay"
+               android:visibility="gone"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               card_view:rv_color="@android:color/white"
+               card_view:rv_centered="true"
+               card_view:rv_rippleDuration="100">
+               <RelativeLayout
+                   android:layout_width="80dp"
+                   android:layout_height="80dp"
+                   android:background="@drawable/myovalplay"
+                   android:id="@+id/rlPlay">
+
+                   <ImageView
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+                       android:layout_centerInParent="true"
+                       android:src="@drawable/audio_play"
+                       android:id="@+id/ivPlay"/>
+               </RelativeLayout>
+           </com.andexert.library.RippleView>
+           <ImageView
+               android:layout_centerVertical="true"
+               android:id="@+id/ivAccept"
+               android:layout_width="40dp"
+               android:layout_height="40dp"
+               android:layout_alignParentRight="true"
+               android:src="@drawable/audio_accept"/>
+
+       </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

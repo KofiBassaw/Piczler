@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.piczler.piczler" >
+
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <protected-broadcast android:name="android.intent.action.MEDIA_MOUNTED" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+
+    <application
+        android:name=".GlobalClass"
+        android:allowBackup="true"
+        android:icon="@mipmap/sampleicon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme">
+
+        </activity>
+
+        <activity
+            android:name=".VideoPlayer"
+            android:label="@string/app_name"
+            android:theme="@style/AppFullScreenTheme">
+
+        </activity>
+
+
+
+
+        <activity
+            android:name=".SignIn"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".Pictures"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".OrderMagazine"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".PictureGrid"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".FacebookMain"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".Categories"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".MainHome"
+            android:label="@string/app_name" >
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".SamplePlayer"
+            android:label="@string/app_name"
+            android:theme="@style/AppFullScreenTheme">
+
+        </activity>
+
+
+        <activity
+            android:name=".UserProfile"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".NotificationsActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".WebPageClass"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".Profile"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".LocationActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".ResetPassword"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".ConfirmProfile"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".BlockedActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".FriendActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:theme="@style/AppFullScreenTheme"
+            android:name=".CompleteProject"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".SignUp"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".RecordAudio"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".Post"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".WebPageClassInstagram"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".SocialPictures"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".Settings"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".ConfirmShare"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+
+
+
+
+        <receiver
+            android:name="com.piczler.piczler.MyReceiver">
+            <intent-filter>
+                <action android:name="com.piczler.piczler.broadcast"/>
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
