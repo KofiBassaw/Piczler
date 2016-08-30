@@ -254,6 +254,9 @@
                          android:layout_height="wrap_content"
                          android:textSize="14sp"
                          android:textColor="#6b6b6b"
+                         android:id="@+id/tvLocText"
+                         android:lines="1"
+                         android:ellipsize="end"
                          android:layout_marginTop="2dp"
                          android:text="Global"/>
                  </LinearLayout>

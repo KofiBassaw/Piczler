@@ -63,6 +63,8 @@ import com.andexert.library.RippleView;
 import com.androidquery.AQuery;
 import com.androidquery.callback.BitmapAjaxCallback;
 import com.androidquery.callback.ImageOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -130,6 +132,7 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
     private Uri fileUri;
     ImageView ivSettings;
     private static final int VIDEO_CAPTURE = 101;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
 
 
@@ -179,8 +182,9 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
         }else
         {
 
-            setContentView(R.layout.main_home);
 
+            setContentView(R.layout.main_home);
+            checkPlayServices();
             //set the max number of images (image width > 50) to be cached in memory, default is 20
             BitmapAjaxCallback.setCacheLimit(200);
 
@@ -3602,4 +3606,22 @@ if(reload)
 
 
 
+
+
+
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+               // Log.i(TAG, "This device is not supported.");
+                //finish();
+            }
+            return false;
+        }
+        return true;
+    }
 }

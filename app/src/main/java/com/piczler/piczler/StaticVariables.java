@@ -87,6 +87,8 @@ public class StaticVariables {
     public static final String CAPTION = "caption";
     public static final String CATEGORYIDS = "category_ids";
     public static final String USERHASLIKED = "user_has_liked";
+    public static final String HASGCM = "hasGCM";
+    public static final String GCM = "gcm";
     public static final String VIDEOS = "videos";
     public static final String FROM = "from";
     public static final String RELOAD = "reload";

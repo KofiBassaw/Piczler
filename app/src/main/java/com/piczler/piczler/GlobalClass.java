@@ -76,6 +76,18 @@ public class GlobalClass extends Application {
 
             getCategories(0,100);
             getNotification();
+
+
+
+            if(!functions.getPref(StaticVariables.HASGCM,false))
+            {
+                String gcm = functions.getPref(StaticVariables.GCM,"");
+
+                if(!gcm.contentEquals(""))
+                {
+                    sendGcm(gcm);
+                }
+            }
         }
 
         StaticVariables.details = new ArrayList<>();
@@ -563,10 +575,15 @@ public class GlobalClass extends Application {
 
 
 
+
+
     }
 
 
+    private void sendGcm(String token)
+    {
 
+    }
 
 
 

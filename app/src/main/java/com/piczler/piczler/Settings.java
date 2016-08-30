@@ -52,6 +52,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     CheckBox cbFacebook,cbInstagram;
     String facebook_accessToken="";
     String faceBookEmail="", facebookUserIduserId ="";
+    TextView tvLocText;
 
     ProgressDialog pDialog;
     private final int FACEBOOKINTENT = 5;
@@ -82,9 +83,10 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         rpLocation = (RippleView) findViewById(R.id.rpLocation);
         rpLegal = (RippleView) findViewById(R.id.rpLegal);
         rpHelp = (RippleView) findViewById(R.id.rpHelp);
+        tvLocText = (TextView) findViewById(R.id.tvLocText);
 
 
-
+        changeLoc();
 
 
         tvEmail.setText(functions.getPref(StaticVariables.EMAIL, ""));
@@ -166,7 +168,29 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         }else if(requestCode == FACEBOOKINTENT && resultCode != RESULT_OK)
         {
             cbFacebook.setChecked(false);
+        }else if(requestCode == LOCATIONCHANGED && resultCode != RESULT_OK)
+        {
+
+
+            changeLoc();
+
         }
+    }
+
+
+    private void changeLoc()
+    {
+
+        boolean  locationMonitor =  functions.getPref(StaticVariables.HASLOCATION,false);
+        String  locComma =  functions.getPref(StaticVariables.LOCATIONCOMMASEPERATED,"");
+        if(locationMonitor)
+        {
+            tvLocText.setText(locComma);
+        }else
+        {
+            tvLocText.setText("Global");
+        }
+
     }
 
     @Override
