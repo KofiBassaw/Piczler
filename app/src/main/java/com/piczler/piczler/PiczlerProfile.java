@@ -132,6 +132,7 @@ public class PiczlerProfile extends Fragment {
                         it.putExtra(StaticVariables.POSITION, position);
                         it.putExtra(StaticVariables.FROM, StaticVariables.PICTURES);
                         it.putExtra(StaticVariables.MEDIA, media);
+                        it.putExtra("myProfile", "yes");
                         it.putExtra(StaticVariables.ID,functions.getPref(StaticVariables.ID,"") );
                         startActivity(it);
                     }

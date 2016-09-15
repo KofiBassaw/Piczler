@@ -53,6 +53,58 @@
 
                     />
 
+
+
+
+                <RelativeLayout
+                    android:layout_toRightOf="@+id/ivProfile"
+                    android:layout_width="match_parent"
+                    android:id="@+id/rlBlocked"
+                    android:visibility="gone"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/materialup.title_container">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                         android:layout_centerInParent="true"
+                        android:layout_marginBottom="80dp"
+                        android:background="@drawable/my_transp_block"
+                        android:id="@+id/cvLogin">
+                        <com.andexert.library.RippleView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            card_view:rv_color="@color/colorPrimary"
+                            card_view:rv_centered="true"
+                            card_view:rv_rippleDuration="200"
+                            android:id="@+id/rpLogin"
+                            android:layout_margin="2dp">
+                            <RelativeLayout
+                                android:layout_width="70dp"
+                                android:layout_height="25dp"
+                                android:id="@+id/rlLogin"
+                                android:background="@android:color/transparent">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:textSize="12sp"
+                                    android:text="BLOCK"
+                                    android:id="@+id/tvBlocked"
+                                    android:textColor="@android:color/white"/>
+                            </RelativeLayout>
+                        </com.andexert.library.RippleView>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
+
+
+
+
+
                 ​
                 <LinearLayout
                     android:id="@+id/materialup.title_container"
@@ -117,6 +169,35 @@
             android:layout_marginTop="50dp"
             android:visibility="gone"/>
 
+
+
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:layout_marginTop="50dp"
+          android:id="@+id/llBlockedLayout"
+          android:visibility="gone"
+          android:layout_centerHorizontal="true">
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerHorizontal="true"
+              android:text="Blocked"
+              android:textSize="16sp"
+              android:textColor="#121212"
+             android:layout_gravity="center_horizontal"/>
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerHorizontal="true"
+              android:text="You have blocked this User"
+              android:layout_marginTop="5dp"
+              android:textColor="#aaaaaa"/>
+
+      </LinearLayout>
     </RelativeLayout>
 
 

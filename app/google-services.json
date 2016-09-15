@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "1085696961875",
-    "firebase_url": "https://piczler-141610.firebaseio.com",
-    "project_id": "piczler-141610",
-    "storage_bucket": "piczler-141610.appspot.com"
+    "project_number": "797517530244",
+    "firebase_url": "https://piczler-4fb26.firebaseio.com",
+    "project_id": "piczler-4fb26",
+    "storage_bucket": "piczler-4fb26.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1085696961875:android:c8ef73ea77c9b47a",
+        "mobilesdk_app_id": "1:797517530244:android:c8ef73ea77c9b47a",
         "android_client_info": {
           "package_name": "com.piczler.piczler"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1085696961875-fjoio1pmsiahs20f6b841t4aicmndape.apps.googleusercontent.com",
+          "client_id": "797517530244-2b0ghjh8oqnee242uur1f0k1jbu0l18v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDq--12IcuUHPgCQX_OZ0oaKiaRr2GD7SM"
+          "current_key": "AIzaSyCy_CQyJhk6IzopXiGnq6RUK7NXlt0IXdI"
         }
       ],
       "services": {

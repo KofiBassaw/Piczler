@@ -26,6 +26,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
 
@@ -180,6 +181,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
         boolean  locationMonitor =  functions.getPref(StaticVariables.HASLOCATION,false);
         String  locComma =  functions.getPref(StaticVariables.LOCATIONMAESSEPERATED,"");
+        System.out.println("ttttttttttt: "+locComma);
         if(locationMonitor)
         {
             tvLocText.setText(locComma);
@@ -285,6 +287,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                 rpLocation.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                     @Override
                     public void onComplete(RippleView rippleView) {
+                        System.out.println("ttttttttttttttttt: "+StaticVariables.countries.size());
                         Intent it = new Intent(Settings.this,LocationActivity.class);
                         startActivityForResult(it, LOCATIONCHANGED);
                     }
@@ -330,6 +333,22 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                     functions.setPref(StaticVariables.FACEBOOKEID, "");
                     functions.setPref(StaticVariables.ACCESSTOKEN, "");
                     functions.setPref(StaticVariables.HASFACEBOOKLOGIN,false);
+
+                    try
+                    {
+
+                        MixpanelAPI mixpanel =
+                                MixpanelAPI.getInstance(Settings.this, StaticVariables.MIXPANEL_TOKEN);
+                        JSONObject props = new JSONObject();
+                        props.put("Facebook Connected","NO");
+                        mixpanel.getPeople().set(props);
+                        mixpanel.track("Facebook Disconnected");
+                        mixpanel.getPeople().increment("Profile Edits",1);
+                    }catch (Exception ex)
+                    {
+
+                    }
+
                 }else
                 {
                     boolean isLog = isFacebookLoggedIn();
@@ -384,6 +403,17 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                         db.open();
                         db.deleteSampleJson(functions.getPref(StaticVariables.ID, ""), StaticVariables.INSTAGRAMPICS);
                         db.close();
+
+
+
+                            MixpanelAPI mixpanel =
+                                    MixpanelAPI.getInstance(Settings.this, StaticVariables.MIXPANEL_TOKEN);
+                            JSONObject props = new JSONObject();
+                            props.put("Instagram Connected","NO");
+                            mixpanel.getPeople().set(props);
+                            mixpanel.track("Instagram Disconnected");
+                            mixpanel.getPeople().increment("Profile Edits",1);
+
                     }catch (Exception ex){
 
                     }
@@ -526,6 +556,21 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
 
 
+                                        try
+                                        {
+                                            MixpanelAPI mixpanel =
+                                                    MixpanelAPI.getInstance(Settings.this, StaticVariables.MIXPANEL_TOKEN);
+                                            JSONObject props = new JSONObject();
+                                            props.put("Facebook Connected","YES");
+                                            mixpanel.getPeople().set(props);
+                                            mixpanel.track("Facebook Connected");
+                                            mixpanel.getPeople().increment("Profile Edits",1);
+
+
+                                        }catch (Exception ex)
+                                        {
+                                            ex.printStackTrace();
+                                        }
                                     } else if (code == 403) {
                                         functions.showMessage(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));
                                         reverseFaceBook();
@@ -670,6 +715,22 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                                         }
 
 
+
+                                        try
+                                        {
+                                            MixpanelAPI mixpanel =
+                                                    MixpanelAPI.getInstance(Settings.this, StaticVariables.MIXPANEL_TOKEN);
+                                            JSONObject props = new JSONObject();
+                                            props.put("Instagram Connected","YES");
+                                            mixpanel.getPeople().set(props);
+                                            mixpanel.track("Instagram Connected");
+                                            mixpanel.getPeople().increment("Profile Edits",1);
+
+
+                                        }catch (Exception ex)
+                                        {
+                                            ex.printStackTrace();
+                                        }
                                     } else if (code == 403) {
                                         // function.showMessage(function.getJsonString(meta, StaticVariables.ERROR_MESSAGE));
                                         reverseInsta(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));

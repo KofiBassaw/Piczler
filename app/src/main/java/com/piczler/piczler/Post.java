@@ -22,8 +22,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,8 +33,12 @@ import com.andexert.library.RippleView;
 import com.bumptech.glide.Glide;
 import com.cunoraz.tagview.*;
 import com.cunoraz.tagview.TagView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -62,11 +68,14 @@ public class Post extends AppCompatActivity implements TagListView.TagListener {
     String med;
     Bitmap bitmapToSend;
     int pos;
+    String source;
+    ProgressBar pbReload;
 
     //TagListView tagListView;
 
     com.cunoraz.tagview.TagView tagGroup;
     ArrayList<Tag> tags;
+    Button bReload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +85,9 @@ public class Post extends AppCompatActivity implements TagListView.TagListener {
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
        // tagListView = (TagListView) findViewById(R.id.tagview);
         tagGroup = (com.cunoraz.tagview.TagView)findViewById(R.id.tag_group);
+        pbReload = (ProgressBar) findViewById(R.id.pbReload);
+        bReload = (Button) findViewById(R.id.bReload);
+        functions = new UserFunctions(this);
 
 
         setSupportActionBar(toolbar);
@@ -85,103 +97,149 @@ public class Post extends AppCompatActivity implements TagListView.TagListener {
         etCaption = (EditText) findViewById(R.id.etCaption);
         type = getIntent().getStringExtra(StaticVariables.TYPE);
         pos = getIntent().getExtras().getInt(StaticVariables.POSITION);
+
+        //File ff = new File(profilePic);
+        String ext = profilePic.substring(profilePic.lastIndexOf(".")+1,profilePic.length());
+        System.out.println("ooooooooooooooo "+ext);
         if(type.contentEquals("image"))
         {
             setCapturedImage(profilePic);
+
             med = "image/jpeg";
+            //med = "image/"+ext;
             typer = 0;
 
         }else if(type.contentEquals("video")){
+            source = getIntent().getStringExtra("source");
             typer = 1;
             med = "video/mp4";
-            Glide.with(this)
-                    .load( Uri.fromFile(new File(profilePic)) )
-                    .into( ivImage );
+           // med = "video/"+ext;
+
+            Bitmap samp =  functions.getVideoThumbnail(profilePic,source);
+
+            if(samp != null)
+            {
+                ivImage.setImageBitmap(samp);
+            }else
+            {
+                Glide.with(this)
+                        .load( Uri.fromFile(new File(profilePic)) )
+                        .into( ivImage );
+            }
+
         }else if(type.contentEquals("audio"))
         {
             typer = 2;
-            med = "audio/3gp";
+            //med = "audio/3gp";
+            med = "audio/"+ext;
             ivImage.setBackgroundColor(Color.parseColor("#f9b466"));
         }
 
-        functions = new UserFunctions(this);
+
 
 
         details = new ArrayList<>();
         String oldCat = functions.getPref(StaticVariables.CATEGORIESSAVED,"");
-       try{
-           
-           JSONArray arr = new JSONArray(oldCat);
+
+        if(!oldCat.contentEquals(""))
+        {
+            bindTags(oldCat);
+        }else {
+            pbReload.setVisibility(View.VISIBLE);
+            getCategories(0,200);
+        }
+
+
+
+        bReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bReload.setVisibility(View.GONE);
+                pbReload.setVisibility(View.VISIBLE);
+
+                getCategories(0,200);
+            }
+        });
+
+    }
+
+
+    private void bindTags(String oldCat)
+    {
+
+
+        try{
+
+            JSONArray arr = new JSONArray(oldCat);
             GettersAndSetters Details;
-           tags = new ArrayList<>();
-           Tag tg;
+            tags = new ArrayList<>();
+            Tag tg;
 
-           for(int i=0; i<arr.length(); i++){
-               JSONObject c = arr.getJSONObject(i);
-               Details = new GettersAndSetters();
-               Details.setName(functions.getJsonString(c, StaticVariables.NAME));
-               Details.setId(functions.getInt(c, StaticVariables.ID));
-               Details.setFollowed(false);
+            for(int i=0; i<arr.length(); i++){
+                JSONObject c = arr.getJSONObject(i);
+                Details = new GettersAndSetters();
+                Details.setName(functions.getJsonString(c, StaticVariables.NAME));
+                Details.setId(functions.getInt(c, StaticVariables.ID));
+                Details.setFollowed(false);
 
-               //tagListView.addTag(functions.getJsonString(c, StaticVariables.NAME));
+                //tagListView.addTag(functions.getJsonString(c, StaticVariables.NAME));
 
-               tg = new Tag(functions.getJsonString(c, StaticVariables.NAME));
-               tg.isDeletable = false;
-               tg.layoutBorderColor = Color.parseColor("#1f1f1f");
-               tg.layoutColorPress = Color.TRANSPARENT;
-               tg.radius = 10f;
-               tg.layoutColor = Color.parseColor("#ffffff");
-               tg.tagTextColor = Color.parseColor("#1f1f1f");
-               tg.tagTextSize = 12;
+                tg = new Tag(functions.getJsonString(c, StaticVariables.NAME));
+                tg.isDeletable = false;
+                tg.layoutBorderColor = Color.parseColor("#1f1f1f");
+                tg.layoutColorPress = Color.TRANSPARENT;
+                tg.radius = 10f;
+                tg.layoutColor = Color.parseColor("#ffffff");
+                tg.tagTextColor = Color.parseColor("#1f1f1f");
+                tg.tagTextSize = 12;
 
-               tg.layoutBorderSize = 1;
-               tags.add(tg);
-               details.add(Details);
-           }
-         //  tagListView.addTagListener(this);
-           tagGroup.addTags(tags);
-
-
+                tg.layoutBorderSize = 1;
+                tags.add(tg);
+                details.add(Details);
+            }
+            //  tagListView.addTagListener(this);
+            tagGroup.addTags(tags);
 
 
 
 
 
-           //set click listener
-           tagGroup.setOnTagClickListener(new TagView.OnTagClickListener() {
-               @Override
-               public void onTagClick(Tag tag, int position) {
-
-                   if(!details.get(position).followed)
-                   {
-                       details.get(position).followed = true;
-                       tags.get(position).layoutColor = Color.parseColor("#2C4389");
-                       tags.get(position).tagTextColor = Color.WHITE;
-                   }else
-                   {
-                       details.get(position).followed = false;
-                       tags.get(position).layoutColor  = Color.parseColor("#ffffff");
-                       tags.get(position).tagTextColor  = Color.parseColor("#1f1f1f");
-                   }
 
 
-                   tagGroup.addTag(tag);
-                   tagGroup.remove(tags.size());
+            //set click listener
+            tagGroup.setOnTagClickListener(new TagView.OnTagClickListener() {
+                @Override
+                public void onTagClick(Tag tag, int position) {
+
+                    if(!details.get(position).followed)
+                    {
+                        details.get(position).followed = true;
+                        tags.get(position).layoutColor = Color.parseColor("#2C4389");
+                        tags.get(position).tagTextColor = Color.WHITE;
+                    }else
+                    {
+                        details.get(position).followed = false;
+                        tags.get(position).layoutColor  = Color.parseColor("#ffffff");
+                        tags.get(position).tagTextColor  = Color.parseColor("#1f1f1f");
+                    }
+
+
+                    tagGroup.addTag(tag);
+                    tagGroup.remove(tags.size());
 
 
 
 
 
-               }
-           });
+                }
+            });
 
+            pbReload.setVisibility(View.GONE);
 
-       }catch (Exception e){
-           System.out.println("bbbbbbbbbbb error here: activity "+e.getLocalizedMessage());
-           e.printStackTrace();
-       }
-
-
+        }catch (Exception e){
+            System.out.println("bbbbbbbbbbb error here: activity "+e.getLocalizedMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -415,6 +473,8 @@ public class Post extends AppCompatActivity implements TagListView.TagListener {
 
 
     private void sendImageToserver(final File image){
+        functions = new UserFunctions(this);
+        new ProgressDialog(this);
         pDialog = functions.prepareDialog("Sending post...",false);
         pDialog.show();
         Ion.with(this)
@@ -448,7 +508,45 @@ public class Post extends AppCompatActivity implements TagListView.TagListener {
                                     if (code == 200) {
                                         JSONObject data = functions.getJsonObject(json, StaticVariables.DATA);
                                         if (data != null) {
-                                            image.delete();
+                                            //image.delete();
+
+
+
+
+                                            try
+                                            {
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(Post.this, StaticVariables.MIXPANEL_TOKEN);
+
+
+
+                                                if(type.contentEquals("image"))
+                                                {
+
+
+
+                                                    mixpanel.track("Photo Upload");
+                                                    mixpanel.getPeople().increment("Photo Uploads",1);
+
+                                                } else if(type.contentEquals("video")){
+                                                    mixpanel.track("Video Upload");
+                                                    mixpanel.getPeople().increment("Video Uploads",1);
+
+
+                                                 }else if(type.contentEquals("audio")) {
+                                                    mixpanel.track("Audio Upload");
+                                                    mixpanel.getPeople().increment("Audio Uploads",1);
+                                            }
+
+
+
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
+
+
                                           Intent it = new Intent();
                                             Bundle basket = new Bundle();
                                             basket.putString(StaticVariables.DATA, data.toString());
@@ -604,5 +702,99 @@ public class Post extends AppCompatActivity implements TagListView.TagListener {
     }
 
 
+
+    private void getCategories(final int offset, final int limit){
+
+
+        ConnectionDetector cd=new ConnectionDetector(this);
+        if(cd.isConnectingToInternet()){//chang this function later
+
+
+
+
+            //http://admin.assurances.gov.gh/api/v1.0/users/login/
+
+
+            //
+            System.out.println(StaticVariables.CATEGORIES + "?" + StaticVariables.OFFSET + "=" + offset + "&&" + StaticVariables.LIMIT + "=" + limit);
+            Ion.with(this)
+                    .load("GET", StaticVariables.BASE_URL + StaticVariables.CATEGORIES + "?" + StaticVariables.OFFSET + "=" + offset + "&&" + StaticVariables.LIMIT + "=" + limit)
+                    .setHeader(StaticVariables.USERAGENT, functions.getUserAgent())
+                    .setHeader(StaticVariables.DEVICEID, functions.getPhoneID())
+                    .setHeader(StaticVariables.COKIE, functions.getCokies())
+                    .asString()
+                    .setCallback(new FutureCallback<String>() {
+                        @Override
+                        public void onCompleted(Exception e, String result) {
+                            try {
+                                if (e != null) {
+                                    e.printStackTrace();
+                                    System.out.println("---------------------------------- error");
+                                }
+                                System.out.println("------------------------------- " + result);
+
+                                if (result != null) {
+                                    JSONObject json = new JSONObject(result);
+
+                                    JSONObject meta = functions.getJsonObject(json, StaticVariables.META);
+                                    functions.setPref(StaticVariables.HASCATEGORY, true);
+                                    if (meta != null) {
+                                        int code = functions.getInt(meta, StaticVariables.CODE);
+                                        if (code == 200) {
+                                            JSONArray data = functions.getJsonArray(json, StaticVariables.DATA);
+                                            if (data != null) {
+
+                                                String oldString = functions.getPref(StaticVariables.CATEGORIESSAVED,"");
+                                                functions.setPref(StaticVariables.CATEGORIESSAVED,data.toString());
+
+                                                bindTags(data.toString());
+
+
+
+
+
+                                            }else {
+                                                showError("Unable to load categories, please try again later");
+                                            }
+
+                                        }else
+                                        {
+                                            showError("Unable to load categories, please try again later");
+                                        }
+                                    }else
+                                    {
+                                        showError("Unable to load categories, please try again later");
+                                    }
+
+                                }else
+                                {
+                                    showError("Unable to load categories, please try again later");
+                                }
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                showError("Unable to load categories, please try again later");
+                            }
+                        }
+                    });
+
+
+        }else
+        {
+            showError("No internet connection, please try again later");
+        }
+
+
+    }
+
+
+
+    private void showError(String message)
+    {
+        functions.showMessage(message);
+        pbReload.setVisibility(View.GONE);
+        bReload.setVisibility(View.VISIBLE);
+
+    }
 
 }

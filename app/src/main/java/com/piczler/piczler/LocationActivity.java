@@ -80,7 +80,8 @@ SwitchCompat switch_compat;
                         pbBar.setVisibility(View.VISIBLE);
                     }else
                     {
-                        details = StaticVariables.countries;
+                        details = new ArrayList<>();
+                        details.addAll(StaticVariables.countries);
                         pbBar.setVisibility(View.GONE);
                         loading = false;
                         //show list
@@ -109,7 +110,8 @@ SwitchCompat switch_compat;
                 pbBar.setVisibility(View.VISIBLE);
             }else
             {
-                details = StaticVariables.countries;
+                details = new ArrayList<>();
+                details.addAll(StaticVariables.countries);
                 pbBar.setVisibility(View.GONE);
                 loading = false;
                 //show list
@@ -119,6 +121,8 @@ SwitchCompat switch_compat;
         }
 
 
+
+        //System.out.println("tttttttttt: "+details.size());
     }
 
 
@@ -189,7 +193,8 @@ SwitchCompat switch_compat;
                     if(loading == true)
                     {
                         loading = false;
-                        details = StaticVariables.countries;
+                        details = new ArrayList<>();
+                        details.addAll(StaticVariables.countries);
                         adopter = new LocationAdapter(details, LocationActivity.this);
                         recyclerView.setAdapter(adopter);
                         pbBar.setVisibility(View.GONE);
@@ -241,7 +246,7 @@ SwitchCompat switch_compat;
             {
                 GettersAndSetters Details = details.get(i);
 
-                if(Details.selected)
+                if(Details.selected && !locationSeperated.contains(Details.code+","))
                 {
 
                     if(locationSeperated.length()>0) {
@@ -255,10 +260,18 @@ SwitchCompat switch_compat;
 
 
             }
+            StaticVariables.countries.clear();
+            StaticVariables.countries = new ArrayList<>();
+            System.out.println("ttttttttttttttt "+details.size()+" and "+StaticVariables.countries.size());
+            StaticVariables.countries.addAll(details);
+
+
+            System.out.println("ttttttttttttttt "+details.size()+" and "+StaticVariables.countries.size());
             if(locationSeperated.length()>0)
                 locationSeperated+=",";
             functions.setPref(StaticVariables.LOCATIONCOMMASEPERATED,locationSeperated);
             functions.setPref(StaticVariables.LOCATIONMAESSEPERATED,names);
+            System.out.println("ttttttttttttttt "+names);
         }
 
         System.out.println("bbbbbbbb: locationMonitor: "+locationMonitor+"   HASLOCATION: "+functions.getPref(StaticVariables.HASLOCATION,false));

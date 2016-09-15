@@ -12,7 +12,10 @@ import android.widget.TextView;
 import com.andexert.library.RippleView;
 import com.androidquery.AQuery;
 import com.androidquery.callback.ImageOptions;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.trncic.library.DottedProgressBar;
+
+import org.json.JSONObject;
 
 /**
  * Created by pk on 4/22/15.
@@ -144,6 +147,20 @@ public class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
                         it.putExtra(StaticVariables.FROM,StaticVariables.FEED);
                         it.putExtra(StaticVariables.ID,String.valueOf(Details.id));
                         context.startActivity(it);
+
+
+
+                        try
+                        {
+                            MixpanelAPI mixpanel =
+                                    MixpanelAPI.getInstance(context, StaticVariables.MIXPANEL_TOKEN);
+                            JSONObject onj = new JSONObject();
+                            onj.put("Category",Details.name);
+                                mixpanel.track("Viewed Category Feed",onj);
+                        }catch (Exception ex)
+                        {
+                            ex.printStackTrace();
+                        }
                     }
                 });
             }

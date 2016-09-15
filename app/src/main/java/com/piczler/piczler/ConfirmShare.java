@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,11 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
+import android.widget.VideoView;
 
 import com.andexert.library.RippleView;
 
@@ -62,6 +66,9 @@ public class ConfirmShare extends AppCompatActivity implements View.OnClickListe
     private Toolbar toolbar;
     MenuItem nextDone;
     UserFunctions functions;
+    RelativeLayout rlPlayLayout;
+    VideoView videoView;
+    String typeer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +76,15 @@ public class ConfirmShare extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.confirm_image);
         toolbar = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
+        videoView =
+                (VideoView) findViewById(R.id.videoView1);
 
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
 
         ivImage = (ImageView) findViewById(R.id.ivImage);
+        rlPlayLayout = (RelativeLayout) findViewById(R.id.rlPlayLayout);
         rlMainView = (RelativeLayout) findViewById(R.id.rlMainView);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         functions = new UserFunctions(this);
@@ -84,8 +94,43 @@ public class ConfirmShare extends AppCompatActivity implements View.OnClickListe
 
         if (Intent.ACTION_SEND.equals(action) && type != null) {
           if (type.startsWith("image/")) {
+              typeer = "image";
               rlMainView.setVisibility(View.VISIBLE);
                 handleSendImage(intent); // Handle single image being sent
+            } if (type.startsWith("video/")) {
+                typeer = "video";
+                rlPlayLayout.setVisibility(View.GONE);
+                rlMainView.setVisibility(View.GONE);
+                Uri videouri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                if (videouri != null) {
+                 profilePic = getVideoReal(videouri);
+
+                 if(profilePic != null)
+                 {
+                     ivImage.setVisibility(View.GONE);
+                     videoView.setVisibility(View.VISIBLE);
+                     videoView.setVideoPath(profilePic);
+
+
+
+                     MediaController mediaController = new
+                             MediaController(this);
+                     mediaController.setAnchorView(videoView);
+                     videoView.setMediaController(mediaController);
+
+                     videoView.start();
+
+
+                     videoView.setOnPreparedListener(new
+                                                             MediaPlayer.OnPreparedListener() {
+                                                                 @Override
+                                                                 public void onPrepared(MediaPlayer mp) {
+                                                                   mp.setLooping(true);
+
+                                                                 }
+                                                             });
+                 }
+                }
             }
         }
 
@@ -298,11 +343,14 @@ public class ConfirmShare extends AppCompatActivity implements View.OnClickListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.idNext) {
-            Intent it = new Intent(ConfirmShare.this, Post.class);
-            it.putExtra(StaticVariables.PROFILE_PICTURE, profilePic);
-            it.putExtra(StaticVariables.TYPE, "image");
-            it.putExtra(StaticVariables.POSITION, prev);
-            startActivityForResult(it, SENDPOST);
+           if(profilePic != null)
+           {
+               Intent it = new Intent(ConfirmShare.this, Post.class);
+               it.putExtra(StaticVariables.PROFILE_PICTURE, profilePic);
+               it.putExtra(StaticVariables.TYPE, typeer);
+               it.putExtra(StaticVariables.POSITION, prev);
+               startActivityForResult(it, SENDPOST);
+           }
             return true;
         }else if(id == android.R.id.home)
         {
@@ -373,6 +421,34 @@ public class ConfirmShare extends AppCompatActivity implements View.OnClickListe
 
 
 
+    public String getVideoReal(Uri contentUri) {
+
+        try
+        {
+            // can post image
+            String[] proj={MediaStore.Video.Media.DATA};
+            Cursor cursor =getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+
+            return cursor.getString(column_index);
+
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+
+
+            //String fullPath = RealPathUtil.getPath(this,contentUri) ;
+            return  null;
+        }
+
+
+
+    }
+
+
+
+
     public String getRealPathFromURI(Uri contentUri) {
 
         try
@@ -427,7 +503,7 @@ public class ConfirmShare extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode == SENDPOST){
-           startActivity(new Intent(this,MainHome.class));
+           //startActivity(new Intent(this,MainHome.class));
             finish();
         }
     }

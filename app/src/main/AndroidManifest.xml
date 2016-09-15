@@ -168,6 +168,7 @@
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="image/*" />
+                <data android:mimeType="video/*"/>
             </intent-filter>
         </activity>
 
@@ -190,6 +191,9 @@
             </intent-filter>
         </receiver>
 
+
+
+
         <service
             android:name=".CustomFirebaseMessagingService">
             <intent-filter>
@@ -202,6 +206,9 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+
+
+
 
     </application>
 

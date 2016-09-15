@@ -29,6 +29,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
 
@@ -253,6 +254,20 @@ ProgressDialog pDIalogi;
                                         int code = functions.getInt(meta, StaticVariables.CODE);
                                         if (code == 200) {
 
+
+                                            try
+                                            {
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(OrderMagazine.this, StaticVariables.MIXPANEL_TOKEN);
+
+                                                mixpanel.getPeople().set("Magazine Order", "YES");
+                                                mixpanel.track("Magazine Order");
+
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
 
                                             AlertDialog dd = new AlertDialog.Builder(OrderMagazine.this).create();
                                             dd.setTitle("Order Completed");

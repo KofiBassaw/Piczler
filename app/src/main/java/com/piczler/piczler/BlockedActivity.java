@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -147,6 +148,20 @@ public class BlockedActivity extends AppCompatActivity {
                                             hasUnblocked = true;
                                             if(details.size() == 0)
                                                 tvNousers.setVisibility(View.VISIBLE);
+
+
+
+                                            try {
+
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(BlockedActivity.this, StaticVariables.MIXPANEL_TOKEN);
+
+                                                mixpanel.getPeople().increment("Blocked Users",1);
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
 
                                         } else if (code == 403 || code == 401) {
                                             pDIalogi.dismiss();;

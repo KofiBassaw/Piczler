@@ -57,6 +57,14 @@
             android:layout_centerInParent="true"
             android:src="@drawable/playicon"/>
     </RelativeLayout>
+
+
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:id="@+id/videoView1"/>
 </RelativeLayout>
 
 

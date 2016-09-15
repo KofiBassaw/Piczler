@@ -43,6 +43,7 @@ public class Categories extends AppCompatActivity {
     int limit = 20;
     int offset = 0;
     MenuItem nextDone;
+    int counter = 0;
 
     SwipyRefreshLayout swipyrefreshlayout;
     @Override
@@ -364,6 +365,14 @@ public class Categories extends AppCompatActivity {
                                             }
                                             details.get(position).loading = false;
                                             recyclerAdapter.notifyDataSetChanged();
+
+                                            if(action.contentEquals(StaticVariables.FOLLOW))
+                                            {
+                                                counter ++;
+                                            }else
+                                            {
+                                                counter --;
+                                            }
                                         }else{
                                             changeBack(action,position);
                                         }
@@ -433,9 +442,21 @@ public class Categories extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.idNext) {
-             if (from == null)
-            startActivity(new Intent(this, MainHome.class));
-             finish();
+            if (from == null){
+                if(counter < 4)
+                {
+                    functions.showMessage("Follow at least four categories");
+                }else {
+                    startActivity(new Intent(this, MainHome.class));
+                    finish();
+                }
+
+
+        }else
+            {
+                finish();
+            }
+
             return true;
         }
 

@@ -6,10 +6,12 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
@@ -87,6 +89,7 @@ import java.util.Map;
 /**
  * Created by matiyas on 11/18/15.
  */
+
 
 public class MainHome extends AppCompatActivity implements View.OnClickListener {
      CustomViewPager vpPager;
@@ -676,15 +679,18 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
         }else if (requestCode == VIDEO_CAPTURE && resultCode == RESULT_OK)
         {
             String realUrl = getRealPathFromURI(data.getData());
+            Intent it = new Intent(MainHome.this, ConfirmProfile.class);
             if(realUrl == null)
             {
                 realUrl = ""+data.getData();
+                it.putExtra("source","vid");
             }
             // Toast.makeText(this, "Video has been saved to:\n" +
             //  realUrl, Toast.LENGTH_LONG).show();
 
-            Intent it = new Intent(MainHome.this, ConfirmProfile.class);
+
             it.putExtra(StaticVariables.PROFILE_PICTURE, realUrl);
+
             it.putExtra(StaticVariables.TYPE, "video");
             // startActivity(it);
             startActivityForResult(it, SENDPOST);
@@ -894,7 +900,12 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
 
                    if(type == 2)
                    {
-                       System.out.println("rrrrrrrrrr:  "+feeds.toString());
+                       JSONObject audio = functions.getJsonObject(json,StaticVariables.AUDIOS);
+                       String newVideoPath = functions.getJsonString(audio,StaticVariables.URL);
+                       Intent it= new Intent(MainHome.this,VideoPlayer.class);
+                       it.putExtra(StaticVariables.URL, newVideoPath);
+                       it.putExtra("type",type);
+                       startActivity(it);
 
                    }else if(type == 1)
                    {
@@ -927,6 +938,7 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
                                Intent it= new Intent(MainHome.this,VideoPlayer.class);
                                it.putExtra(StaticVariables.URL, newVideoPath);
                                it.putExtra(StaticVariables.IMAGES, imageUrl);
+                               it.putExtra("type",type);
                                startActivity(it);
                            }
                        }
@@ -1497,13 +1509,27 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
 
 
                                                     } else {
+
+
                                                         tvNoMedia.setVisibility(View.GONE);
                                                         llBottomHold.setVisibility(View.VISIBLE);
                                                         llRightHolder.setVisibility(View.VISIBLE);
 
                                                         System.out.println("aaaaaaaaaaa: " + data.toString());
+                                                        if(data.length()>0)
+                                                        {
+                                                            new BindAsync().execute(data.toString());
+                                                        }else
+                                                        {
+                                                            canLoad = true;
+                                                            if(!slideDown)
+                                                            {
+                                                                swapView();
+                                                            }
+                                                            vpPager.setCurrentItem(vpPager.getCurrentItem()-1);
+                                                        }
 
-                                                        new BindAsync().execute(data.toString());
+
                                                     }
 
 
@@ -1646,13 +1672,28 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
                 vpPager.setCurrentItem(1);
             }else
             {
-                vpPager.setCurrentItem(prevPos-2);
+
+
+                new PrepareChange().execute("" + prevPos);
+
+                mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+                vpPager.setAdapter(mPagerAdapter);
+
+                vpPager.setCurrentItem(prevPos,true);
+                Intent it= new Intent(StaticVariables.IMAGEMESSAGE);
+                it.putExtra("pos",prevPos);
+                sendBroadcast(it);
             }
             canLoad = true;
             if(!slideDown)
             {
                 swapView();
             }
+
+
+
+
+
         }
 
 
@@ -1748,11 +1789,33 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
             position = getArguments().getInt("pos");
             function = new UserFunctions(getActivity());
 
+            setImage();
 
+
+          view.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                 // System.out.println("-------------------- "+position);
+                  swapView();
+              }
+          });
+            //container.addView(view);
+
+
+
+
+
+            return  theLayout;
+        }
+
+
+
+        private void setImage()
+        {
             try{
 
                 JSONObject json = feeds.getJSONObject(position);
-                 int type = function.getInt(json,StaticVariables.TYPE);
+                int type = function.getInt(json,StaticVariables.TYPE);
                 if(type ==0 || type == 1)
                 {
                     //System.out.println("################: "+json.toString());
@@ -1775,6 +1838,7 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
                     }
                 }else
                 {
+                    pbBarImage.setVisibility(View.GONE);
                     view.setImageResource(R.drawable.audiobackground);
                 }
 
@@ -1782,19 +1846,52 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
             }catch (Exception e){
                 e.printStackTrace();
             }
-
-          view.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                 // System.out.println("-------------------- "+position);
-                  swapView();
-              }
-          });
-            //container.addView(view);
-
-
-            return  theLayout;
         }
+
+
+
+        @Override
+        public void onResume() {
+            getActivity().registerReceiver(mHandleMessageReceiver, new IntentFilter(
+                    StaticVariables.IMAGEMESSAGE));
+            super.onResume();
+        }
+
+
+
+        @Override
+        public void onDestroy() {
+            try {
+                getActivity().unregisterReceiver(mHandleMessageReceiver);
+            } catch (Exception e) {
+                Log.e("rror", "> " + e.getMessage());
+            }
+            super.onDestroy();
+        }
+
+
+
+
+        private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+
+               int pos = intent.getExtras().getInt("pos");
+                System.out.println("lllllllllllllllll: pos: "+pos +" and position "+position);
+                if(position == pos)
+                {
+                    setImage();
+                }
+
+
+            }
+        };
+
+
+
+
+
 
     }
 
@@ -2463,7 +2560,14 @@ private void addData(String message)
                         Details.setContenttype(StaticVariables.PEOPLETYPE);
                         Details.setLayouttype(StaticVariables.MAINTYPE);
                         Details.setServerID(functions.getJsonString(oneUser, StaticVariables.ID));
-                        Details.setName(functions.getJsonString(oneUser, StaticVariables.DISPLAYNAME));
+
+                        String name  = functions.getJsonString(oneUser, StaticVariables.FULLNAME);
+                        if(name.contentEquals(""))
+                        {
+                            name = functions.getJsonString(oneUser, StaticVariables.DISPLAYNAME);
+                        }
+
+                        Details.setName(name);
                         Details.setJsonString(oneUser.toString());
                         searchList.add(Details);
 
@@ -2868,6 +2972,21 @@ private void addData(String message)
                                             feeds = new JSONArray(newFeed.toString());
                                             mPagerAdapter.notifyDataSetChanged();
                                             vpPager.invalidate();
+
+
+                                            try {
+
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(MainHome.this, StaticVariables.MIXPANEL_TOKEN);
+
+                                                mixpanel.getPeople().increment("Deletes",1);
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
+
+
                                         } else if (code == 403 || code == 401) {
                                             functions.showMessage(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));
                                            // swapSearchProgress();
@@ -2944,6 +3063,18 @@ private void addData(String message)
                                         if (code == 200) {
                                             functions.showMessage("Media flaged");
 
+
+                                            try {
+
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(MainHome.this, StaticVariables.MIXPANEL_TOKEN);
+
+                                                mixpanel.getPeople().increment("Flags",1);
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
                                         } else if (code == 403 || code == 401) {
                                             functions.showMessage(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));
                                             //swapSearchProgress();
@@ -3151,7 +3282,22 @@ if(reload)
                                         if (code == 200) {
                                             System.out.println("bbbbbb: blocked");
 
+
+
                                           new RemoveBlocked().execute(userID);
+
+                                            try {
+
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(MainHome.this, StaticVariables.MIXPANEL_TOKEN);
+
+                                                mixpanel.getPeople().increment("Blocked Users",1);
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
+
                                         } else if (code == 403 || code == 401) {
                                             pDIalogi.dismiss();;
                                             functions.showMessage(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));
@@ -3251,6 +3397,8 @@ if(reload)
 
 
                 int type = functions.getInt(json,StaticVariables.TYPE);
+
+                System.out.println("oooooooooooooooooooooooooooo:  "+type);
                 if(type ==1)
                 {
                      rlPlayLayout.setVisibility(View.VISIBLE);
@@ -3263,7 +3411,8 @@ if(reload)
                 {
                     //audio
                     rlPlayLayout.setVisibility(View.VISIBLE);
-                    ivPlayIcon.setVisibility(View.GONE);
+                    ivPlayIcon.setVisibility(View.VISIBLE);
+                    System.out.println("oooooooooooooooooooooooooooo:  "+json.toString());
                 }
 
                 int likes = 0;
@@ -3378,6 +3527,7 @@ if(reload)
                 op.fileCache = true;
                 op.memCache=false;
                 op.targetWidth = 50;
+                op.fallback = R.drawable.adele;
                 aq.id(ivSenderImage).image(url, op);
 
                 int likeInt = functions.getPref("feed" + functions.getJsonString(json, StaticVariables.ID), 3);

@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -34,6 +36,8 @@ import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 /**
  * Created by pk on 5/19/15.
@@ -375,6 +379,39 @@ public JSONObject getJsonObject(JSONObject json, String title){
         }
 
     }
+
+
+
+
+
+
+    public  Bitmap getVideoThumbnail(String path, String source) {
+        Bitmap bitmap = null;
+
+        FFmpegMediaMetadataRetriever fmmr = new FFmpegMediaMetadataRetriever();
+
+        try {
+            fmmr.setDataSource(path);
+
+            final byte[] data = fmmr.getEmbeddedPicture();
+
+            if (data != null) {
+                bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            }
+
+            if (bitmap == null) {
+                bitmap = fmmr.getFrameAtTime();
+                if(source != null)
+                bitmap = rotateImage(90,bitmap);
+            }
+        } catch (Exception e) {
+            bitmap = null;
+        } finally {
+            fmmr.release();
+        }
+        return bitmap;
+    }
+
     public Bitmap getRoundedShape(Bitmap scaleBitmapImage) {
         int targetWidth = 50;
         int targetHeight = 50;
@@ -437,4 +474,34 @@ public JSONObject getJsonObject(JSONObject json, String title){
 
         return "token="+getPref(StaticVariables.TOKEN,"");
     }
+
+
+
+    public Bitmap rotateImage(int degree, Bitmap b){
+
+        if(degree<=0){
+            return b;
+        }
+        System.out.println("--------------------------------------------- rotate image ");
+        String data ="degree: "+degree+"\n";
+        try{
+            Matrix matrix = new Matrix();
+            if(b.getWidth()>b.getHeight()){
+                data+="WIDTH GREATE: w: "+b.getWidth()+" H: "+b.getHeight();
+                matrix.setRotate(degree);
+                b = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(),
+                        matrix, true);
+            }else if(b.getWidth()>b.getHeight() && degree<=0){
+                data+="degree 0: w: "+b.getWidth()+" H: "+b.getHeight();
+                matrix.setRotate(90);
+                b = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(),
+                        matrix, true);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return b;
+    }
+
 }

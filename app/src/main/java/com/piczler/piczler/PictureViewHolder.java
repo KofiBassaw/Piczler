@@ -74,6 +74,9 @@ public class PictureViewHolder extends RecyclerView.ViewHolder {
             op.preset = icon;
             op.fallback = R.drawable.placeholder;
             aq.id(ivPicture).image(Details.cover, op);
+        }else
+        {
+            ivPicture.setImageResource(R.drawable.audiobackgroundsmall);
         }
 
     }

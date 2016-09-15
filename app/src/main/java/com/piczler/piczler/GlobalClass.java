@@ -1,6 +1,7 @@
 package com.piczler.piczler;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,6 +13,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.viethoa.models.AlphabetItem;
 
 import org.json.JSONArray;
@@ -78,7 +80,7 @@ public class GlobalClass extends Application {
             getNotification();
 
 
-            System.out.println("llllllllllll: "+functions.getPref(StaticVariables.GCM,""));
+            System.out.println("lllllllllllllllll: "+functions.getPref(StaticVariables.GCM,""));
 
             if(!functions.getPref(StaticVariables.HASGCM,false))
             {
@@ -110,6 +112,15 @@ public class GlobalClass extends Application {
     }
 
 
+    /*
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
+
+    */
     private boolean IsChecked(String code)
     {
         String commaSep = functions.getPref(StaticVariables.LOCATIONCOMMASEPERATED,"");
@@ -609,6 +620,10 @@ public class GlobalClass extends Application {
                                     int code = functions.getInt(meta, StaticVariables.CODE);
                                     if (code == 200) {
                                        functions.setPref(StaticVariables.HASGCM,true);
+
+                                        MixpanelAPI mixpanel =
+                                                MixpanelAPI.getInstance(GlobalClass.this, StaticVariables.MIXPANEL_TOKEN);
+                                        mixpanel.identify(functions.getPref(StaticVariables.ID,""));
 
 
                                     }

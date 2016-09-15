@@ -66,6 +66,10 @@ ArrayList<GettersAndSetters>details;
         facebookId = functions.getPref(StaticVariables.FACEBOOKEID, "");
         tvNoPhotos = (TextView) theLayout.findViewById(R.id.tvNoPhotos);
         recyclerView = (RecyclerView) theLayout.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         swipyrefreshlayout = (SwipyRefreshLayout) theLayout.findViewById(R.id.swipyrefreshlayout);
         pbBar = (ProgressBar) theLayout.findViewById(R.id.pbBar);
         initRecyclerView();
@@ -95,6 +99,7 @@ ArrayList<GettersAndSetters>details;
         }else {
             System.out.print("bbbbbbbbbbbbbbb:   here is not valid "+facebookId+" sample here: "+functions.getPref(StaticVariables.HASFACEBOOKLOGIN,false));
             tvNoPhotos.setVisibility(View.VISIBLE);
+            tvNoPhotos.setText("Go to settings and connect your facebook account");
             pbBar.setVisibility(View.GONE);
         }
 
@@ -156,7 +161,7 @@ ArrayList<GettersAndSetters>details;
                        try{
 
                            JSONObject resp = response.getJSONObject();
-                           System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbb "+resp.toString());
+                           System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbb albums "+resp.toString());
 
                                JSONArray data = functions.getJsonArray(resp, StaticVariables.DATA);
                                if(data != null){
@@ -196,12 +201,14 @@ ArrayList<GettersAndSetters>details;
 
     private void retireveSinglePhoto(final JSONArray data, final int pos, final AccessToken currentAccessToken){
 
+        System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbb pos: "+pos);
+
          if(pos< totals)
          {
              String albumID = "";
 
             try{
-                albumID = functions.getJsonString(data.getJSONObject(0),StaticVariables.ID);
+                albumID = functions.getJsonString(data.getJSONObject(pos),StaticVariables.ID);
             }catch (Exception e)
             {
 
@@ -220,7 +227,7 @@ ArrayList<GettersAndSetters>details;
                          public void onCompleted(GraphResponse response) {
 
                              try{
-                                 System.out.println("++++++++++++++++++++ single image"+response.toString());
+                                 System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbb single image"+response.toString());
                                  JSONObject resp = response.getJSONObject();
 
                                   JSONArray dataimage = functions.getJsonArray(resp,StaticVariables.DATA);
@@ -270,7 +277,7 @@ ArrayList<GettersAndSetters>details;
                         try{
 
                             JSONObject resp = response.getJSONObject();
-                            System.out.println("++++++++++++++++++++ single image url"+resp.toString());
+                            System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbb single image url"+resp.toString());
 
                             JSONArray imagesArray =  functions.getJsonArray(resp, StaticVariables.IMAGES);
 
@@ -291,7 +298,7 @@ ArrayList<GettersAndSetters>details;
                                       Details.setSelected(false);
                                       details.add(Details);
                                       images.add(add);
-                                      StaticVariables.piczlerMag.put(functions.getJsonString(thummb, StaticVariables.SOURCE), "" +0);
+                                      StaticVariables.facebookMag.put(functions.getJsonString(thummb, StaticVariables.SOURCE), "" +0);
                                      // StaticVariables.facebookMag.add(Details);
                                       map2.put(functions.getJsonString(thummb, StaticVariables.SOURCE),functions.getJsonString(thummb, StaticVariables.SOURCE));
                                   }

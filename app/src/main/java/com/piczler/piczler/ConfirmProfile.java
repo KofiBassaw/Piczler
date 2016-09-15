@@ -42,6 +42,7 @@ import ly.img.android.sdk.filter.ColorFilterMellow;
 import ly.img.android.sdk.filter.ColorFilterOrchid;
 import ly.img.android.sdk.filter.ColorFilterQuozi;
 import ly.img.android.sdk.filter.ColorFilterSunset;
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 /**
  * Created by matiyas on 11/24/15.
@@ -64,6 +65,8 @@ public class ConfirmProfile extends AppCompatActivity implements View.OnClickLis
     private Toolbar toolbar;
     MenuItem nextDone;
     UserFunctions functions;
+    String source;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,23 +92,47 @@ public class ConfirmProfile extends AppCompatActivity implements View.OnClickLis
             new BindAsync().execute("0");
         }else if(type.contentEquals("video"))
         {
+            source = getIntent().getStringExtra("source");
             rlPlayLayout.setVisibility(View.VISIBLE);
             rlMainView.setVisibility(View.GONE);
-           // Bitmap bMap = ThumbnailUtils.createVideoThumbnail(profilePic, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
+
+            Bitmap samp =  functions.getVideoThumbnail(profilePic,source);
+
+            if(samp != null)
+            {
+                ivImage.setImageBitmap(samp);
+            }else
+            {
+                Glide.with(this)
+                        .load(Uri.fromFile( new File( profilePic ) ) )
+                        .into( ivImage );
+            }
+
+              /*
+            Uri imageUri = Uri.fromFile( new File( profilePic ) );
+            if(imageUri == null)
+            {
+                System.out.println("llllllllllllllllllllllll:  null");
+            }else {
+                System.out.println("llllllllllllllllllllllll:  not null");
+            }
+            Bitmap bMap = ThumbnailUtils.createVideoThumbnail(profilePic, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
 
 
-           // ivImage.setImageBitmap(bMap);
+            ivImage.setImageBitmap(bMap);
 
-            /*
+
 
             Glide.with(this)
                     .load(Uri.fromFile( new File( profilePic ) ) )
                     .into( ivImage );
             */
 
+            /*
             Glide.with(this)
                     .load( Uri.fromFile(new File(profilePic)) )
                     .into( ivImage );
+            */
         }
 
        // rlMark.setOnClickListener(this);
@@ -523,6 +550,7 @@ public class ConfirmProfile extends AppCompatActivity implements View.OnClickLis
             it.putExtra(StaticVariables.PROFILE_PICTURE, profilePic);
             it.putExtra(StaticVariables.TYPE, type);
             it.putExtra(StaticVariables.POSITION, prev);
+            it.putExtra("source", source);
             startActivityForResult(it, SENDPOST);
             return true;
         }else if(id == android.R.id.home)
@@ -532,5 +560,8 @@ public class ConfirmProfile extends AppCompatActivity implements View.OnClickLis
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 
 }

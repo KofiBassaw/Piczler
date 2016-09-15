@@ -319,7 +319,8 @@ public class PictureGrid extends AppCompatActivity {
                         if(mobileRes != null){
                             String url = functions.getJsonString(mobileRes,StaticVariables.URL);
                             Detail.setCover(url);
-                            StaticVariables.piczlerMag.put(url,functions.getJsonString(c, StaticVariables.ID)+"|"+functions.getInt(c,StaticVariables.TYPE));
+
+
                         }
                     }
 

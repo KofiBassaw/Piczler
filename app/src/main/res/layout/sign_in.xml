@@ -213,7 +213,7 @@
         card_view:rv_rippleDuration="200">
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp     "
+            android:layout_height="50dp"
             android:layout_weight="50"
             android:background="@color/signEmail"
             android:id="@+id/rlEmail">

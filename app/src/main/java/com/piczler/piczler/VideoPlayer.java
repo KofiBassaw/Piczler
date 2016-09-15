@@ -1,5 +1,6 @@
 package com.piczler.piczler;
 
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,22 +21,34 @@ public class VideoPlayer extends AppCompatActivity {
     String TAG = "com.piczler.piczler.videoplayer";
     ProgressBar pbBar;
     ImageView ivImage;
+    int type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.videoplayer);
         pbBar = (ProgressBar) findViewById(R.id.pbBar);
         ivImage = (ImageView) findViewById(R.id.ivImage);
+        type = getIntent().getExtras().getInt("type");
 
 
-        String url = getIntent().getStringExtra(StaticVariables.IMAGES);
-        AQuery aq = new AQuery(this);
-        ImageOptions op=new ImageOptions();
-        op.fileCache = true;
-        op.memCache=true;
-        op.targetWidth = 2000;
+        if(type == 1)
+        {
+            String url = getIntent().getStringExtra(StaticVariables.IMAGES);
+            AQuery aq = new AQuery(this);
+            ImageOptions op=new ImageOptions();
+            op.fileCache = true;
+            op.memCache=true;
+            op.targetWidth = 2000;
 
-        aq.id(ivImage).image(url, op);
+            aq.id(ivImage).image(url, op);
+        }else
+        {
+            ivImage.setImageResource(R.drawable.audiobackground);
+        }
+
+
+
+
 
         final VideoView videoView =
                 (VideoView) findViewById(R.id.videoView1);
@@ -57,6 +70,8 @@ public class VideoPlayer extends AppCompatActivity {
                                                         Log.i(TAG, "Duration = " +
                                                                 videoView.getDuration());
                                                         pbBar.setVisibility(View.GONE);
+
+                                                        if(type == 1)
                                                         ivImage.setVisibility(View.GONE);
 
                                                     }

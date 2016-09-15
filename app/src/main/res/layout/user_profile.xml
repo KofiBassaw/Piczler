@@ -154,16 +154,16 @@
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
             android:id="@+id/orderMagazine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             fab:fab_colorNormal="@android:color/transparent"
-            fab:fab_title="Order Magazine"
+            fab:fab_title="Order Print"
             fab:fab_colorPressed="@color/colorPrimaryDark"/>
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
             android:id="@+id/ordio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             fab:fab_colorNormal="@android:color/transparent"
             fab:fab_title="Audio"
             fab:fab_colorPressed="@color/colorPrimaryDark"/>

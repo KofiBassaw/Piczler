@@ -57,6 +57,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -124,6 +125,7 @@ String from ="";
     int pos;
     ImageView ivPlayIcon;
 
+    String myProfile;
 
 
 
@@ -203,7 +205,7 @@ String from ="";
         llUserProfile.setOnClickListener(this);
         rlPlayLayout.setOnClickListener(this);
 
-
+        myProfile = getIntent().getStringExtra("myProfile");
 
 
 
@@ -299,6 +301,16 @@ String from ="";
                     }else {
                         new PrepareChange().execute("" + selectedPos);
                     }
+
+
+
+
+                    commentLimit = 10;
+                    commentOffset = 0;
+                    commentArrayList = new ArrayList<>();
+                    comentSelectedListID = new ArrayList<>();
+                    comentSelectedTosend = new ArrayList<>();
+                    selectedAdapter = null;
 
 
 
@@ -502,7 +514,9 @@ String from ="";
                     String typeWord = wordsArray[wordsArray.length - 1];
 
                     if (typeWord.startsWith("@")) {
-                        if (typeWord.length() > 1) {
+                        if (typeWord.length() > 0) {
+
+
                             String sentString = typeWord.substring(1, (typeWord.length()));
                             // System.out.println("$$$$$$$$$$$$   " + typeWord + "    $$$ " + sentString);
 
@@ -519,7 +533,6 @@ String from ="";
                         lvCommentSelected.setAdapter(selectedAdapter);
                     }
                 }
-
 
             }
         });
@@ -655,7 +668,18 @@ String from ="";
                                                         }
 
                                                     } else {
-                                                        new BindAsync().execute(data.toString());
+                                                        if(data.length()>0)
+                                                        {
+                                                            new BindAsync().execute(data.toString());
+                                                        }else
+                                                        {
+                                                            canLoad = true;
+                                                            if(!slideDown)
+                                                            {
+                                                                swapView();
+                                                            }
+                                                            vpPager.setCurrentItem(vpPager.getCurrentItem()-1);
+                                                        }
                                                     }
 
 
@@ -786,7 +810,19 @@ String from ="";
 
                                                 } else {
 
-                                                    new BindAsync().execute(data.toString());
+                                                    if(data.length()>0)
+                                                    {
+                                                        new BindAsync().execute(data.toString());
+                                                    }else
+                                                    {
+                                                        canLoad = true;
+                                                        if(!slideDown)
+                                                        {
+                                                            swapView();
+                                                        }
+                                                        vpPager.setCurrentItem(vpPager.getCurrentItem()-1);
+                                                    }
+
                                                 }
 
 
@@ -1122,6 +1158,12 @@ String from ="";
                     if(type == 2)
                     {
 
+                        JSONObject audio = functions.getJsonObject(json,StaticVariables.AUDIOS);
+                        String newVideoPath = functions.getJsonString(audio,StaticVariables.URL);
+                        Intent it= new Intent(Pictures.this,VideoPlayer.class);
+                        it.putExtra(StaticVariables.URL, newVideoPath);
+                        it.putExtra("type",type);
+                        startActivity(it);
                     }else if(type == 1)
                     {
 
@@ -1160,6 +1202,7 @@ String from ="";
                                 Intent it= new Intent(Pictures.this,VideoPlayer.class);
                                 it.putExtra(StaticVariables.URL, newVideoPath);
                                 it.putExtra(StaticVariables.IMAGES, imageUrl);
+                                it.putExtra("type",type);
                                 startActivity(it);
                             }
                         }
@@ -1377,28 +1420,25 @@ String from ="";
                             JSONObject user = json.getJSONObject(StaticVariables.USER);
 
                             String userID = functions.getJsonString(user,StaticVariables.ID);
-                            if(!functions.getPref(StaticVariables.ID,"").contentEquals(userID))
+
+                            if(myProfile == null)
                             {
-                                saveMedia(feedID);
-                            }else {
-                                final AlertDialog dd = new AlertDialog.Builder(Pictures.this).create();
-                                dd.setMessage("Are you sure you want to delete feed?");
-                                dd.setButton(Dialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
 
-                                    }
-                                });
+                                if(!functions.getPref(StaticVariables.ID,"").contentEquals(userID))
+                                {
+                                    saveMedia(feedID);
+                                }else {
 
-                                dd.setButton(Dialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dd.dismiss();
-                                        deleteFeed(feedID, position);
-                                    }
-                                });
-                                dd.show();
+                                    delDialog(feedID, position);
+                                }
+
+
+                            }else
+                            {
+                               delDialog(feedID, position);
                             }
+
+
 
 
 
@@ -1425,6 +1465,27 @@ String from ="";
         }
     }
 
+
+    private void delDialog(final String feedID, final int position)
+    {
+        final AlertDialog dd = new AlertDialog.Builder(Pictures.this).create();
+        dd.setMessage("Are you sure you want to delete feed?");
+        dd.setButton(Dialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        dd.setButton(Dialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dd.dismiss();
+                deleteFeed(feedID, position);
+            }
+        });
+        dd.show();
+    }
 
 
     private void  swapComment(){
@@ -1557,7 +1618,18 @@ String from ="";
                 vpPager.setCurrentItem(1);
             }else
             {
-                vpPager.setCurrentItem(prevPos-2);
+                mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+                vpPager.setAdapter(mPagerAdapter);
+
+                vpPager.setCurrentItem(prevPos,true);
+
+                new PrepareChange().execute("" + prevPos);
+
+                /*
+                Intent it= new Intent(StaticVariables.IMAGEMESSAGE);
+                it.putExtra("pos",prevPos);
+                sendBroadcast(it);
+                */
             }
             canLoad = true;
             if(!slideDown)
@@ -1680,6 +1752,7 @@ String from ="";
                     }
                 }else
                 {
+                    pbBarImage.setVisibility(View.GONE);
                     view.setImageResource(R.drawable.audiobackground);
                 }
 
@@ -2432,6 +2505,19 @@ String from ="";
                                             feeds = new JSONArray(newFeed.toString());
                                             mPagerAdapter.notifyDataSetChanged();
                                             vpPager.invalidate();
+
+                                            try {
+
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(Pictures.this, StaticVariables.MIXPANEL_TOKEN);
+
+                                                mixpanel.getPeople().increment("Deletes",1);
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
+
                                         } else if (code == 403 || code == 401) {
                                             functions.showMessage(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));
                                             // swapSearchProgress();
@@ -2506,6 +2592,17 @@ String from ="";
                                         if (code == 200) {
                                             functions.showMessage("Media flaged");
 
+                                            try {
+
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(Pictures.this, StaticVariables.MIXPANEL_TOKEN);
+
+                                                mixpanel.getPeople().increment("Flags",1);
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
                                         } else if (code == 403 || code == 401) {
                                             functions.showMessage(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));
                                             //swapSearchProgress();
@@ -2712,6 +2809,19 @@ String from ="";
                                             System.out.println("bbbbbb: blocked");
 
                                             new RemoveBlocked().execute(userID);
+                                            try {
+
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(Pictures.this, StaticVariables.MIXPANEL_TOKEN);
+
+                                                mixpanel.getPeople().increment("Blocked Users",1);
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
+
+
                                         } else if (code == 403 || code == 401) {
                                             pDIalogi.dismiss();;
                                             functions.showMessage(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));
@@ -2822,7 +2932,7 @@ String from ="";
                 {
                     //audio
                     rlPlayLayout.setVisibility(View.VISIBLE);
-                    ivPlayIcon.setVisibility(View.GONE);
+                    ivPlayIcon.setVisibility(View.VISIBLE);
                 }
 
 
@@ -2922,21 +3032,43 @@ String from ="";
 
                 String feeduserID =  functions.getJsonString(user,StaticVariables.ID);
 
-                if(feeduserID.contentEquals(functions.getPref(StaticVariables.ID,"")))
-                {
-                    //set image to delete icon
-                    ivSaveOrDelete.setImageResource(R.drawable.cancel_icon);
-                }else
-                {
-                    ivSaveOrDelete.setImageResource(R.drawable.save);
-                    //set image to save icon
-                }
+
+
+
+
+
+
+
+if(myProfile == null)
+{
+    if(feeduserID.contentEquals(functions.getPref(StaticVariables.ID,"")))
+    {
+        //set image to delete icon
+        ivSaveOrDelete.setImageResource(R.drawable.cancel_icon);
+    }else
+    {
+        ivSaveOrDelete.setImageResource(R.drawable.save);
+        //set image to save icon
+    }
+
+}else
+{
+    ivSaveOrDelete.setImageResource(R.drawable.cancel_icon);
+}
+
+
+
+
+
+
+
 
                 AQuery aq = new AQuery(Pictures.this);
                 ImageOptions op=new ImageOptions();
                 op.fileCache = true;
                 op.memCache=false;
                 op.targetWidth = 50;
+                op.fallback = R.drawable.adele;
                 aq.id(ivSenderImage).image(url, op);
 
                 int likeInt = functions.getPref("feed" + functions.getJsonString(json, StaticVariables.ID), 3);

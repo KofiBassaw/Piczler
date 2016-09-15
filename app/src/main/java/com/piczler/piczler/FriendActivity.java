@@ -23,6 +23,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.viethoa.RecyclerViewFastScroller;
 
 import org.json.JSONArray;
@@ -224,7 +225,7 @@ private void sendContact()
     if(contacts.size() >0)
     {
         //send data here
-        inviteContact(contacts);
+        inviteContact(contacts, contacts.size());
 
     }else {
         functions.showMessage("Select at least one contact");
@@ -236,7 +237,7 @@ private void sendContact()
 
 
 
-    private void inviteContact(JsonArray contacts)
+    private void inviteContact(JsonArray contacts, final int counter)
     {
 
         pDIalogi = new ProgressDialog(this);
@@ -280,6 +281,23 @@ private void sendContact()
                                             pbBar.setVisibility(View.GONE);
 
                                             fastScroller.setUpAlphabet(StaticVariables.mAlphabetItems);
+
+
+
+                                            try {
+
+                                                MixpanelAPI mixpanel =
+                                                        MixpanelAPI.getInstance(FriendActivity.this, StaticVariables.MIXPANEL_TOKEN);
+
+                                                mixpanel.getPeople().increment("Invites Sent",counter);
+
+                                                mixpanel.track("Invite Friends");
+
+                                            }catch (Exception ex)
+                                            {
+                                                ex.printStackTrace();
+                                            }
+
                                         } else if (code == 403 || code == 401) {
                                             pDIalogi.dismiss();;
                                             functions.showMessage(functions.getJsonString(meta, StaticVariables.ERROR_MESSAGE));

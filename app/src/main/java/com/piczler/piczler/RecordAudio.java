@@ -232,8 +232,12 @@ public class RecordAudio extends AppCompatActivity implements View.OnClickListen
     }
 
     private void stopPlaying() {
-        timer.cancel();
-        timer.purge();
+        if(timer != null)
+        {
+            timer.cancel();
+            timer.purge();
+        }
+
         if(mPlayer!=null)
         {
             mPlayer.release();
@@ -261,9 +265,12 @@ public class RecordAudio extends AppCompatActivity implements View.OnClickListen
     }
 
     private void stopRecording() {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
+      if(mRecorder!=null)
+      {
+          mRecorder.stop();
+          mRecorder.release();
+          mRecorder = null;
+      }
     }
 
 
@@ -278,8 +285,23 @@ public class RecordAudio extends AppCompatActivity implements View.OnClickListen
     }
 
 
+    @Override
+    protected void onDestroy() {
 
+        if(timer != null)
+        {
+            timer.cancel();
+            timer.purge();
+        }
+        if(mRecorder != null)
+        {
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
+        }
 
+        super.onDestroy();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

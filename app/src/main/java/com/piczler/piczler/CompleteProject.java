@@ -36,6 +36,7 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;
 
@@ -280,6 +281,17 @@ public class CompleteProject extends AppCompatActivity implements View.OnClickLi
                 rpSkip.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                     @Override
                     public void onComplete(RippleView rippleView) {
+
+                     try
+                     {
+                         MixpanelAPI mixpanel =
+                                 MixpanelAPI.getInstance(CompleteProject.this, StaticVariables.MIXPANEL_TOKEN);
+                         mixpanel.track("ProfileCompletionSkipped");
+                     }catch (Exception ex)
+                     {
+                         ex.printStackTrace();
+                     }
+
                         skipToCat();
                     }
                 });
@@ -288,6 +300,7 @@ public class CompleteProject extends AppCompatActivity implements View.OnClickLi
                 rpComplet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                     @Override
                     public void onComplete(RippleView rippleView) {
+
                         fullName = functions.getText(etCompleteProfile);
                         if(fullName.contentEquals("")){
                             etCompleteProfile.setError("Provide your name");
@@ -382,6 +395,29 @@ public class CompleteProject extends AppCompatActivity implements View.OnClickLi
                                                 functions.setPref(StaticVariables.FACEBOOKEID, facebookID);
                                                 functions.setPref(StaticVariables.ID, id);
 
+
+
+
+                                                try {
+                                                    MixpanelAPI mixpanel =
+                                                            MixpanelAPI.getInstance(CompleteProject.this, StaticVariables.MIXPANEL_TOKEN);
+                                                    JSONObject props = new JSONObject();
+                                                    props.put("name",displayName);
+                                                    props.put("email",email);
+                                                    mixpanel.getPeople().set(props);
+
+
+
+
+
+
+                                                }catch (Exception ex)
+                                                {
+                                                    ex.printStackTrace();
+                                                }
+
+
+
                                                 JSONObject picture = functions.getJsonObject(user, StaticVariables.PROFILE_PICTURE);
 
                                                 if (picture != null) {
@@ -408,6 +444,12 @@ public class CompleteProject extends AppCompatActivity implements View.OnClickLi
                                         } else {
                                             functions.showMessage("Unable to update profile picture");
                                         }
+
+
+
+
+
+
 
                                         skipToCat();
 
@@ -670,6 +712,35 @@ public class CompleteProject extends AppCompatActivity implements View.OnClickLi
                                                 functions.setPref(StaticVariables.FULLNAME, fullname);
                                                 functions.setPref(StaticVariables.FACEBOOKEID, facebookID);
                                                 functions.setPref(StaticVariables.ID, id);
+
+
+
+
+                                                  try {
+                                                      MixpanelAPI mixpanel =
+                                                              MixpanelAPI.getInstance(CompleteProject.this, StaticVariables.MIXPANEL_TOKEN);
+                                                      JSONObject props = new JSONObject();
+                                                      props.put("name",displayName);
+                                                      props.put("email",email);
+                                                      mixpanel.getPeople().set(props);
+
+
+
+
+
+                                                      if(from == null)
+                                                      {
+
+                                                          mixpanel.track("ProfileCompletionDone");
+
+                                                      }else {
+                                                          mixpanel.getPeople().increment("Profile Edits",1);
+                                                      }
+
+                                                  }catch (Exception ex)
+                                                  {
+                                                      ex.printStackTrace();
+                                                  }
 
                                                 JSONObject picture = functions.getJsonObject(user, StaticVariables.PROFILE_PICTURE);
 

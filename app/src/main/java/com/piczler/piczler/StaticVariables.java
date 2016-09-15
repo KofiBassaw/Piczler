@@ -90,6 +90,7 @@ public class StaticVariables {
     public static final String HASGCM = "hasGCM";
     public static final String GCM = "gcm";
     public static final String VIDEOS = "videos";
+    public static final String AUDIOS = "audio";
     public static final String FROM = "from";
     public static final String RELOAD = "reload";
     public static final String HASLOGEDIN = "haslogedIn";
@@ -121,6 +122,7 @@ public class StaticVariables {
     public static final String FOLLOWNOTIFY = "com.piczler.piczler.follownotify";
     public static final String PAGERCHANGED = "com.piczler.piczler.pagerchanged";
     public static final String RELOADIMAGES = "com.piczler.piczler.reloadImages";
+    public static final String IMAGEMESSAGE = "com.piczler.piczler.imageMessage";
     public static final String UNBLOCK = "com.piczler.piczler.unblock";
     public static final String FRIEND = "com.piczler.piczler.friend";
     public static final String FINISHEDLOADING = "com.piczler.piczler.loading";

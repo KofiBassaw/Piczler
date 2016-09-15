@@ -109,17 +109,18 @@ public class InstagramProfile extends Fragment {
             {
                 ex.printStackTrace();
             }
+            getInstaPictures();
 
         }else {
 
             tvNoPhotos.setVisibility(View.VISIBLE);
             pbBar.setVisibility(View.GONE);
+            tvNoPhotos.setText("Go to settings and connect your instagram account");
         }
 
 
 
 
-        getInstaPictures();
 
         return theLayout;
     }
