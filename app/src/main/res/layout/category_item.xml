@@ -104,18 +104,6 @@
 
 
 
-               <com.trncic.library.DottedProgressBar
-                   android:id="@+id/progress"
-                   android:layout_width="34dp"
-                   android:layout_height="0dp"
-                   android:padding="2dp"
-                   card_view:activeDot="@drawable/myovalgreen"
-                   card_view:dotSize="8dp"
-                   card_view:inactiveDot="@drawable/myovalwhite"
-                   card_view:jumpingSpeed="670"
-                   card_view:spacing="2dp"
-                   android:layout_centerInParent="true"
-                   android:visibility="gone"/>
            </RelativeLayout>
 
        </com.andexert.library.RippleView>

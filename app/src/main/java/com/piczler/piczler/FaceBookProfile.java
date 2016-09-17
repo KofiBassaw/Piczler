@@ -2,6 +2,8 @@ package com.piczler.piczler;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -52,6 +54,7 @@ ArrayList<GettersAndSetters>details;
     Map<String, String> map2 = new HashMap<String, String>();
     TextView tvNoPhotos;
     SwipyRefreshLayout swipyrefreshlayout;
+    PictureAdapter recyclerAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,18 +82,40 @@ ArrayList<GettersAndSetters>details;
         {
             System.out.print("bbbbbbbbbbbbbbb:   here is valid");
             //retrieve facebook photos here to test
-            callbackManager = CallbackManager.Factory.create();
 
-            accessTokenTracker = new AccessTokenTracker() {
-                @Override
-                protected void onCurrentAccessTokenChanged(
-                        AccessToken oldAccessToken,
-                        AccessToken currentAccessToken) {
-                    // Set the access token using
-                    // currentAccessToken when it's loaded or set.
-                    retrieveImages(currentAccessToken);
+
+            try
+            {
+                pbBar.setVisibility(View.VISIBLE);
+                Database db = new Database(getActivity());
+                db.open();
+                Cursor c = db.getSampleDetails(StaticVariables.FACEBOOKPICS,functions.getPref(StaticVariables.ID,""));
+                if(c.getCount()>0)
+                {
+                    c.moveToFirst();
+                   String jsonString = c.getString(c.getColumnIndex(Database.JSONSTRING));
+
+
+
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                        new BindAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, jsonString);
+                    } else {
+                        new BindAsync().execute(jsonString);
+                    }
+                }else
+                {
+                    getPics();
                 }
-            };
+                db.close();
+
+            }catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+
+
+
             //
 
 
@@ -106,6 +131,22 @@ ArrayList<GettersAndSetters>details;
         return theLayout;
     }
 
+
+    private  void getPics()
+    {
+        callbackManager = CallbackManager.Factory.create();
+
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(
+                    AccessToken oldAccessToken,
+                    AccessToken currentAccessToken) {
+                // Set the access token using
+                // currentAccessToken when it's loaded or set.
+                retrieveImages(currentAccessToken);
+            }
+        };
+    }
 
 
     private void initRecyclerView() {
@@ -252,9 +293,32 @@ ArrayList<GettersAndSetters>details;
          }else
          {
              //bind data here
-             PictureAdapter recyclerAdapter = new PictureAdapter(details,getActivity());
-             recyclerView.setAdapter(recyclerAdapter);
+             if(recyclerAdapter == null)
+             {
+                 recyclerAdapter = new PictureAdapter(details,getActivity());
+                 recyclerView.setAdapter(recyclerAdapter);
+
+             }else
+             {
+                 recyclerAdapter.notifyDataSetChanged();
+             }
+
+
              pbBar.setVisibility(View.GONE);
+             try
+             {
+                 if(details.size()>0)
+                 {
+                     Database db = new Database(getActivity());
+                     db.open();
+                     db.insertSampleDetails(functions.getPref(StaticVariables.ID, ""), StaticVariables.FACEBOOKPICS, images.toString());
+                     db.close();
+                 }
+
+             }catch (Exception ex)
+             {
+                 ex.printStackTrace();
+             }
          }
     }
 
@@ -317,4 +381,102 @@ ArrayList<GettersAndSetters>details;
                 }
         ).executeAsync();
     }
+
+
+    private void bindData(String jsonSTring)
+    {
+        try
+        {
+        JSONArray photos = new JSONArray(jsonSTring);
+
+
+            for(int i=0; i<photos.length(); i++)
+            {
+                JSONObject oneOBj = photos.getJSONObject(i);
+                GettersAndSetters Details = new GettersAndSetters();
+                JsonObject add = new JsonObject();
+                add.addProperty(StaticVariables.URL, functions.getJsonString(oneOBj, StaticVariables.URL));
+
+                Details.setCover(functions.getJsonString(oneOBj, StaticVariables.URL));
+                Details.setFileType(0);
+                Details.setSelected(false);
+                details.add(Details);
+                images.add(add);
+                StaticVariables.facebookMag.put(functions.getJsonString(oneOBj, StaticVariables.URL), "" +0);
+                // StaticVariables.facebookMag.add(Details);
+                map2.put(functions.getJsonString(oneOBj, StaticVariables.URL),functions.getJsonString(oneOBj, StaticVariables.URL));
+
+
+            }
+        }catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+
+
+
+
+    class BindAsync extends AsyncTask<String, String, String> {
+
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        /**
+         * Creating product
+         * */
+        @Override
+        protected String doInBackground(String... args) {
+
+            try{
+                bindData(args[0]);
+
+            }catch (Exception e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
+
+
+
+
+            return null;
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        @Override
+        protected void onPostExecute(String file_url) {
+
+            if(details.size()>0)
+            {
+                pbBar.setVisibility(View.GONE);
+            }else
+            {
+                pbBar.setVisibility(View.VISIBLE);
+            }
+
+            recyclerAdapter = new PictureAdapter(details,getActivity());
+            recyclerView.setAdapter(recyclerAdapter);
+            getPics();
+
+        }
+
+
+
+
+
+    }
+
+
+
 }

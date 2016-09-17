@@ -9,8 +9,6 @@
     android:scaleType="centerCrop"
     android:adjustViewBounds="true"
     android:id="@+id/ivPicture"
-    android:src="@drawable/adele"
-
     android:layout_margin="1dp"/>
 
     <ImageView

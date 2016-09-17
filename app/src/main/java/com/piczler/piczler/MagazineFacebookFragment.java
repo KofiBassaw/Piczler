@@ -1,6 +1,9 @@
 package com.piczler.piczler;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -33,9 +36,7 @@ import java.util.Set;
 /**
  * Created by matiyas on 8/14/16.
  */
-public class MagazineFacebookFragment extends Fragment{
-
-
+public class MagazineFacebookFragment extends Fragment {
 
 
     String facebookId = "";
@@ -51,7 +52,6 @@ public class MagazineFacebookFragment extends Fragment{
     SwipyRefreshLayout swipyrefreshlayout;
     MagazineAdapter recyclerAdapter;
     Map<String, String> map2 = new HashMap<String, String>();
-
 
 
     @Override
@@ -74,37 +74,33 @@ public class MagazineFacebookFragment extends Fragment{
         swipyrefreshlayout.setEnabled(false);
 
 
-
-        if(OrderMagazine.faceDetails.size()>0)
-        {
-            recyclerAdapter = new MagazineAdapter(OrderMagazine.instDetails,getActivity());
+        if (OrderMagazine.faceDetails.size() > 0) {
+            recyclerAdapter = new MagazineAdapter(OrderMagazine.instDetails, getActivity());
             recyclerView.setAdapter(recyclerAdapter);
-        }else {
+        } else {
 
 
-            if(!facebookId.contentEquals("") && !functions.getPref(StaticVariables.HASFACEBOOKLOGIN,false))
-            {
+            if (!facebookId.contentEquals("") && functions.getPref(StaticVariables.HASFACEBOOKLOGIN, false)) {
                 //retrieve facebook photos here to test
-                callbackManager = CallbackManager.Factory.create();
 
-                accessTokenTracker = new AccessTokenTracker() {
-                    @Override
-                    protected void onCurrentAccessTokenChanged(
-                            AccessToken oldAccessToken,
-                            AccessToken currentAccessToken) {
-                        // Set the access token using
-                        // currentAccessToken when it's loaded or set.
 
-                        retrieveImages(currentAccessToken);
+                try {
+                    pbBar.setVisibility(View.VISIBLE);
 
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                        new BindMapAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    } else {
+                        new BindMapAsync().execute();
                     }
-                };
-                //
 
 
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
 
-            }else {
+            } else {
                 tvNoPhotos.setVisibility(View.VISIBLE);
                 pbBar.setVisibility(View.GONE);
             }
@@ -113,17 +109,27 @@ public class MagazineFacebookFragment extends Fragment{
         }
 
 
-
-
-
-
-
-
         return theLayout;
     }
 
 
+    private void getPics() {
+        callbackManager = CallbackManager.Factory.create();
 
+        accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(
+                    AccessToken oldAccessToken,
+                    AccessToken currentAccessToken) {
+                // Set the access token using
+                // currentAccessToken when it's loaded or set.
+
+                retrieveImages(currentAccessToken);
+
+            }
+        };
+        //
+    }
 
 
     private void initRecyclerView() {
@@ -135,9 +141,6 @@ public class MagazineFacebookFragment extends Fragment{
         recyclerView.setPadding(recyclerView.getPaddingLeft(), recyclerView.getPaddingTop(), recyclerView.getPaddingRight(), recyclerView.getPaddingBottom());
 
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-
-
-
 
 
         recyclerView.addOnItemTouchListener(
@@ -170,14 +173,11 @@ public class MagazineFacebookFragment extends Fragment{
     }
 
 
-
-
-    private void retrieveImages(final AccessToken currentAccessToken)
-    {
+    private void retrieveImages(final AccessToken currentAccessToken) {
         pbBar.setVisibility(View.VISIBLE);
         Bundle params = new Bundle();
         params.putString("fields", "id,name");
-        String url =  "/me/albums";
+        String url = "/me/albums";
         new GraphRequest(
                 currentAccessToken,
                 url,
@@ -186,19 +186,19 @@ public class MagazineFacebookFragment extends Fragment{
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
 
-                        try{
+                        try {
 
                             JSONObject resp = response.getJSONObject();
-                            System.out.println("++++++++++++++++++++ "+resp.toString());
+                            System.out.println("++++++++++++++++++++ " + resp.toString());
 
                             JSONArray data = functions.getJsonArray(resp, StaticVariables.DATA);
-                            if(data != null){
+                            if (data != null) {
                                 totals = data.length();
 
-                                retireveSinglePhoto(data,0, currentAccessToken);
+                                retireveSinglePhoto(data, 0, currentAccessToken);
                             }
 
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -206,7 +206,6 @@ public class MagazineFacebookFragment extends Fragment{
                 }
         ).executeAsync();
     }
-
 
 
     @Override
@@ -218,32 +217,28 @@ public class MagazineFacebookFragment extends Fragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(!facebookId.contentEquals(""))
-        {
-            if(accessTokenTracker != null)
+        if (!facebookId.contentEquals("")) {
+            if (accessTokenTracker != null)
                 accessTokenTracker.stopTracking();
         }
     }
 
 
+    private void retireveSinglePhoto(final JSONArray data, final int pos, final AccessToken currentAccessToken) {
 
-    private void retireveSinglePhoto(final JSONArray data, final int pos, final AccessToken currentAccessToken){
-
-        if(pos< totals)
-        {
+        if (pos < totals) {
             String albumID = "";
 
-            try{
-                albumID = functions.getJsonString(data.getJSONObject(0),StaticVariables.ID);
-            }catch (Exception e)
-            {
+            try {
+                albumID = functions.getJsonString(data.getJSONObject(0), StaticVariables.ID);
+            } catch (Exception e) {
 
             }
 
             //access it here
             Bundle params = new Bundle();
             params.putString("fields", "id,link");
-            String url =  "/"+albumID+"/photos";
+            String url = "/" + albumID + "/photos";
             new GraphRequest(
                     currentAccessToken,
                     url,
@@ -252,22 +247,20 @@ public class MagazineFacebookFragment extends Fragment{
                     new GraphRequest.Callback() {
                         public void onCompleted(GraphResponse response) {
 
-                            try{
-                                System.out.println("++++++++++++++++++++ single image"+response.toString());
+                            try {
+                                System.out.println("++++++++++++++++++++ single image" + response.toString());
                                 JSONObject resp = response.getJSONObject();
 
-                                JSONArray dataimage = functions.getJsonArray(resp,StaticVariables.DATA);
-                                if(dataimage != null)
-                                {
-                                    for (int i=0; i<dataimage.length(); i++)
-                                    {
+                                JSONArray dataimage = functions.getJsonArray(resp, StaticVariables.DATA);
+                                if (dataimage != null) {
+                                    for (int i = 0; i < dataimage.length(); i++) {
                                         JSONObject c = dataimage.getJSONObject(i);
-                                        String imageId = functions.getJsonString(c,StaticVariables.ID);
-                                        getSingleImageUrl(imageId,currentAccessToken);
+                                        String imageId = functions.getJsonString(c, StaticVariables.ID);
+                                        getSingleImageUrl(imageId, currentAccessToken);
                                     }
                                 }
-                                retireveSinglePhoto(data,(pos+1),currentAccessToken);
-                            }catch (Exception e){
+                                retireveSinglePhoto(data, (pos + 1), currentAccessToken);
+                            } catch (Exception e) {
                                 e.printStackTrace();
                                 pbBar.setVisibility(View.GONE);
                             }
@@ -275,23 +268,21 @@ public class MagazineFacebookFragment extends Fragment{
                         }
                     }
             ).executeAsync();
-        }else
-        {
+        } else {
             //bind data here
-            recyclerAdapter = new MagazineAdapter(OrderMagazine.instDetails,getActivity());
+            recyclerAdapter = new MagazineAdapter(OrderMagazine.instDetails, getActivity());
             recyclerView.setAdapter(recyclerAdapter);
             pbBar.setVisibility(View.GONE);
         }
     }
 
-    private void getSingleImageUrl(String imageId, AccessToken currentAccessToken)
-    {
+    private void getSingleImageUrl(String imageId, AccessToken currentAccessToken) {
 
 
         //access it here
         Bundle params = new Bundle();
         params.putString("fields", "id,link,images");
-        String url =  "/"+imageId;
+        String url = "/" + imageId;
         new GraphRequest(
                 currentAccessToken,
                 url,
@@ -300,40 +291,36 @@ public class MagazineFacebookFragment extends Fragment{
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
 
-                        try{
+                        try {
 
                             JSONObject resp = response.getJSONObject();
-                            System.out.println("++++++++++++++++++++ single image url"+resp.toString());
+                            System.out.println("++++++++++++++++++++ single image url" + resp.toString());
 
-                            JSONArray imagesArray =  functions.getJsonArray(resp, StaticVariables.IMAGES);
+                            JSONArray imagesArray = functions.getJsonArray(resp, StaticVariables.IMAGES);
 
-                            if(imagesArray != null)
-                            {
+                            if (imagesArray != null) {
 
-                                if(imagesArray.length()>0){
+                                if (imagesArray.length() > 0) {
                                     JSONObject thummb = imagesArray.getJSONObject(0);
-                                    JSONObject big = imagesArray.getJSONObject((int)imagesArray.length()/2);
+                                    JSONObject big = imagesArray.getJSONObject((int) imagesArray.length() / 2);
                                     GettersAndSetters Details = new GettersAndSetters();
                                     JsonObject add = new JsonObject();
                                     add.addProperty(StaticVariables.URL, functions.getJsonString(thummb, StaticVariables.SOURCE));
 
-                                    if(map2.get(functions.getJsonString(thummb, StaticVariables.SOURCE)) == null)
-                                    {
+                                    if (map2.get(functions.getJsonString(thummb, StaticVariables.SOURCE)) == null) {
                                         Details.setCover(functions.getJsonString(thummb, StaticVariables.SOURCE));
                                         Details.setFileType(0);
                                         Details.setSelected(false);
                                         OrderMagazine.faceDetails.add(Details);
                                         StaticVariables.piczlerMag.put(functions.getJsonString(thummb, StaticVariables.SOURCE), "" + 0);
-                                        map2.put(functions.getJsonString(thummb, StaticVariables.SOURCE),functions.getJsonString(thummb, StaticVariables.SOURCE));
+                                        map2.put(functions.getJsonString(thummb, StaticVariables.SOURCE), functions.getJsonString(thummb, StaticVariables.SOURCE));
                                     }
-
-
 
 
                                 }
                             }
 
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -343,15 +330,12 @@ public class MagazineFacebookFragment extends Fragment{
     }
 
 
-
-    private void bindMap()
-    {
-        try{
+    private void bindMap() {
+        try {
             Set<String> keys = StaticVariables.facebookMag.keySet();
             GettersAndSetters Details;
 
-            for(String i: keys)
-            {
+            for (String i : keys) {
                 Details = new GettersAndSetters();
                 Details.setCover(i);
                 Details.setSelected(false);
@@ -360,10 +344,66 @@ public class MagazineFacebookFragment extends Fragment{
             }
 
 
-        }catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+
+    class BindMapAsync extends AsyncTask<String, String, String> {
+
+        /**
+         * Before starting background thread Show Progress Dialog
+         */
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        /**
+         * Creating product
+         */
+        @Override
+        protected String doInBackground(String... args) {
+
+            try {
+                bindMap();
+
+            } catch (Exception e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         **/
+        @Override
+        protected void onPostExecute(String file_url) {
+
+                System.out.println("bbbbbbbb: hmmmmmmm");
+                recyclerAdapter = new MagazineAdapter(OrderMagazine.faceDetails, getActivity());
+                recyclerView.setAdapter(recyclerAdapter);
+
+
+
+            pbBar.setVisibility(View.GONE);
+
+
+        }
+
+
+    }
+
+
+
+
+
 
 }

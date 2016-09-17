@@ -32,7 +32,6 @@ SwitchCompat switch_compat;
     boolean loading = false;
     ProgressBar pbBar;
     private Toolbar toolbar;
-    ArrayList<GettersAndSetters> details;
     boolean hasUnblocked = false;
     ProgressDialog pDIalogi;
     UserFunctions functions;
@@ -80,20 +79,17 @@ SwitchCompat switch_compat;
                         pbBar.setVisibility(View.VISIBLE);
                     }else
                     {
-                        details = new ArrayList<>();
-                        details.addAll(StaticVariables.countries);
                         pbBar.setVisibility(View.GONE);
                         loading = false;
                         //show list
-                        adopter = new LocationAdapter(details, LocationActivity.this);
+                        adopter = new LocationAdapter(StaticVariables.countries, LocationActivity.this);
                         recyclerView.setAdapter(adopter);
                     }
                 }else
                 {
                     loading = false;
-                    details = new ArrayList<GettersAndSetters>();
                     pbBar.setVisibility(View.GONE);
-                    adopter = new LocationAdapter(details, LocationActivity.this);
+                    adopter = new LocationAdapter(new ArrayList<GettersAndSetters>(), LocationActivity.this);
                     recyclerView.setAdapter(adopter);
                     //hide list
 
@@ -110,12 +106,10 @@ SwitchCompat switch_compat;
                 pbBar.setVisibility(View.VISIBLE);
             }else
             {
-                details = new ArrayList<>();
-                details.addAll(StaticVariables.countries);
                 pbBar.setVisibility(View.GONE);
                 loading = false;
                 //show list
-                adopter = new LocationAdapter(details, LocationActivity.this);
+                adopter = new LocationAdapter(StaticVariables.countries, LocationActivity.this);
                 recyclerView.setAdapter(adopter);
             }
         }
@@ -170,13 +164,13 @@ SwitchCompat switch_compat;
             {
 
                 int pos = intent.getExtras().getInt("pos");
-                details.get(pos).selected = intent.getExtras().getBoolean("check");
+                StaticVariables.countries.get(pos).selected = intent.getExtras().getBoolean("check");
 
 
                 if(intent.getExtras().getBoolean("check")) {
                     //addd to map
-                    names.put(pos,details.get(pos).name);
-                    codes.put(pos,details.get(pos).code);
+                    names.put(pos,StaticVariables.countries.get(pos).name);
+                    codes.put(pos,StaticVariables.countries.get(pos).code);
 
                 }else
                 {
@@ -193,9 +187,7 @@ SwitchCompat switch_compat;
                     if(loading == true)
                     {
                         loading = false;
-                        details = new ArrayList<>();
-                        details.addAll(StaticVariables.countries);
-                        adopter = new LocationAdapter(details, LocationActivity.this);
+                        adopter = new LocationAdapter(StaticVariables.countries, LocationActivity.this);
                         recyclerView.setAdapter(adopter);
                         pbBar.setVisibility(View.GONE);
                     }
@@ -242,9 +234,9 @@ SwitchCompat switch_compat;
         }else
         {
 
-            for(int i =0; i<details.size(); i++)
+            for(int i =0; i<StaticVariables.countries.size(); i++)
             {
-                GettersAndSetters Details = details.get(i);
+                GettersAndSetters Details = StaticVariables.countries.get(i);
 
                 if(Details.selected && !locationSeperated.contains(Details.code+","))
                 {
@@ -262,11 +254,9 @@ SwitchCompat switch_compat;
             }
             StaticVariables.countries.clear();
             StaticVariables.countries = new ArrayList<>();
-            System.out.println("ttttttttttttttt "+details.size()+" and "+StaticVariables.countries.size());
-            StaticVariables.countries.addAll(details);
+            System.out.println("ttttttttttttttt "+StaticVariables.countries.size()+" and "+StaticVariables.countries.size());
 
 
-            System.out.println("ttttttttttttttt "+details.size()+" and "+StaticVariables.countries.size());
             if(locationSeperated.length()>0)
                 locationSeperated+=",";
             functions.setPref(StaticVariables.LOCATIONCOMMASEPERATED,locationSeperated);

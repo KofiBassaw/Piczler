@@ -344,12 +344,13 @@ String from ="";
                         }
                         rlPlayLayout.setVisibility(View.GONE);
                         canLoad = false;
-                            getNotify(getIntent().getStringExtra(StaticVariables.ID));
+
 
 
 
                     }
                 }
+                getNotify(getIntent().getStringExtra(StaticVariables.ID));
                 c.close();
                 db.close();
 
@@ -923,6 +924,9 @@ String from ="";
                                                 db.insertSampleDetails(userID, StaticVariables.NOTIFICSTIONS, data.toString());
                                                 db.close();
 
+                                                boolean swap = false;
+                                                if(feeds == null)
+                                                    swap = true;
 
                                                 GsonBuilder gsonb = new GsonBuilder();
                                                 Gson gson = gsonb.create();
@@ -957,7 +961,7 @@ String from ="";
                                                 }
 
 
-                                                if(from.contentEquals(StaticVariables.COMMENTTYPE))
+                                                if(from.contentEquals(StaticVariables.COMMENTTYPE) && swap == true)
                                                 swapComment();
 
                                             }

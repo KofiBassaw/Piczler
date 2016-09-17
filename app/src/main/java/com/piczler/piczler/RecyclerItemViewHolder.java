@@ -13,7 +13,6 @@ import com.andexert.library.RippleView;
 import com.androidquery.AQuery;
 import com.androidquery.callback.ImageOptions;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
-import com.trncic.library.DottedProgressBar;
 
 import org.json.JSONObject;
 
@@ -31,7 +30,6 @@ public class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
     private final RelativeLayout rlmain;
     private final RippleView rpFollow;
     private final RippleView rpMain;
-    private final DottedProgressBar progressBar;
 
 
 
@@ -40,7 +38,7 @@ public class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
                                   RelativeLayout rlTransparent,
                                   RelativeLayout rlGreen,
                                   RelativeLayout rlFollow,
-                                  RippleView rpFollow,DottedProgressBar progressBar,TextView tvGreen,TextView tvTransparent,
+                                  RippleView rpFollow,TextView tvGreen,TextView tvTransparent,
                                   RippleView rpMain, RelativeLayout rlmain
     ) {
         super(parent);
@@ -50,7 +48,6 @@ public class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
         this.rlGreen = rlGreen;
         this.rlFollow = rlFollow;
         this.rpFollow = rpFollow;
-        this.progressBar = progressBar;
         this.tvGreen = tvGreen;
         this.tvTransparent = tvTransparent;
         this.rpMain = rpMain;
@@ -69,8 +66,7 @@ public class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout rlmain = (RelativeLayout) parent.findViewById(R.id.rlmain);
         RippleView rpFollow = (RippleView) parent.findViewById(R.id.rpFollow);
         RippleView rpMain = (RippleView) parent.findViewById(R.id.rpMain);
-        DottedProgressBar progressBar = (DottedProgressBar) parent.findViewById(R.id.progress);
-        return new RecyclerItemViewHolder(parent, tvName,ivBackground,rlTransparent,rlGreen,rlFollow,rpFollow,progressBar,tvGreen,tvTransparent,rpMain,rlmain);
+        return new RecyclerItemViewHolder(parent, tvName,ivBackground,rlTransparent,rlGreen,rlFollow,rpFollow,tvGreen,tvTransparent,rpMain,rlmain);
     }
 
     public void setItemText(final GettersAndSetters Details, final Context context, final int position) {
@@ -97,17 +93,13 @@ public class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
             rlGreen.setVisibility(View.GONE);
         }
         if (Details.loading){
-            progressBar.setVisibility(View.VISIBLE);
             tvGreen.setVisibility(View.GONE);
             tvTransparent.setVisibility(View.GONE);
-            progressBar.startProgress();
 
             //progressBar.stopProgress();
         }else{
-            progressBar.setVisibility(View.GONE);
             tvGreen.setVisibility(View.VISIBLE);
             tvTransparent.setVisibility(View.VISIBLE);
-            progressBar.stopProgress();
         }
 
         rlFollow.setOnClickListener(new View.OnClickListener() {

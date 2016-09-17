@@ -148,6 +148,7 @@ public class StaticVariables {
     public static final int USERMEDIAJSON = 3;
     public static final int INSTAGRAMPICS = 4;
     public static final int NOTIFICSTIONS = 5;
+    public static final int FACEBOOKPICS = 6;
     public static ArrayList<GettersAndSetters> details;
     public static ArrayList<GettersAndSetters> countries = new ArrayList<>();
 
@@ -181,6 +182,7 @@ public class StaticVariables {
     public static final int PHOTOTYPE = 1;
     public static final int PEOPLETYPE = 2;
     public static final int CATEGORIESTYPE = 3;
+    public static final int FACEBOOKTYPE = 4;
 
 
 

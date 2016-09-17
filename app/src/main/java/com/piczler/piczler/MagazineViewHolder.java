@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.androidquery.AQuery;
 import com.androidquery.callback.ImageOptions;
+import com.bumptech.glide.Glide;
 
 /**
  * Created by pk on 4/22/15.
@@ -58,6 +59,7 @@ public class MagazineViewHolder extends RecyclerView.ViewHolder {
 
         if(Details.fileType == 1 || Details.fileType == 0)
         {
+            /*
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.placeholder);
             AQuery aq = new AQuery(context);
@@ -68,6 +70,15 @@ public class MagazineViewHolder extends RecyclerView.ViewHolder {
             op.preset = icon;
             op.fallback = R.drawable.placeholder;
             aq.id(ivPicture).image(Details.cover, op);
+            */
+
+
+            Glide.with(context)
+                    .load(Details.cover)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(ivPicture);
+
         }
 
     }

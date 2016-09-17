@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.andexert.library.RippleView;
 import com.androidquery.AQuery;
 import com.androidquery.callback.ImageOptions;
+import com.bumptech.glide.Glide;
 import com.trncic.library.DottedProgressBar;
 
 import org.json.JSONObject;
@@ -64,16 +65,32 @@ public class PictureViewHolder extends RecyclerView.ViewHolder {
 
         if(Details.fileType == 1 || Details.fileType == 0)
         {
+
+            /*
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.placeholder);
             AQuery aq = new AQuery(context);
             ImageOptions op=new ImageOptions();
             op.fileCache = true;
-            op.memCache=true;
+            op.memCache=false;
             op.targetWidth = 0;
             op.preset = icon;
             op.fallback = R.drawable.placeholder;
             aq.id(ivPicture).image(Details.cover, op);
+            */
+
+
+
+
+            Glide.with(context)
+                    .load(Details.cover)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(ivPicture);
+
+
+
+
         }else
         {
             ivPicture.setImageResource(R.drawable.audiobackgroundsmall);
