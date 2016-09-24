@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.andexert.library.RippleView;
 import com.androidquery.AQuery;
 import com.androidquery.callback.ImageOptions;
-import com.trncic.library.DottedProgressBar;
 
 /**
  * Created by pk on 4/22/15.

@@ -1488,6 +1488,8 @@ public class MainHome extends AppCompatActivity implements View.OnClickListener 
                                                             canLoad = false;
                                                             vpPager.setAdapter(mPagerAdapter);
                                                             vpPager.setCurrentItem(1);
+
+                                                            new PrepareChange().execute("" + 1);
                                                             canLoad = true;
                                                             if (!slideDown) {
                                                                 swapView();

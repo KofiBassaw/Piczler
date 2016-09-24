@@ -109,8 +109,15 @@ public class Categories extends AppCompatActivity {
           Details.setFollowers(functions.getInt(c, StaticVariables.FOLLOWERS));
           Details.setFrom(from);
           if(currentCat){
-              Details.setFollowed(functions.getBoolean(c, StaticVariables.USERFOLLOW));
+              boolean check = functions.getBoolean(c, StaticVariables.USERFOLLOW);
+                      Details.setFollowed(check);
+
+              if(check)
+                  counter++;
           }else{
+
+
+
               Details.setFollowed(functions.getPref(String.valueOf(functions.getInt(c,StaticVariables.ID)),functions.getBoolean(c, StaticVariables.USERFOLLOW)));
           }
 

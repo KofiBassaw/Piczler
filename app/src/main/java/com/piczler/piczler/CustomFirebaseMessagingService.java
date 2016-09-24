@@ -67,7 +67,7 @@ public class CustomFirebaseMessagingService extends  FirebaseMessagingService{
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-         int type = Integer.parseInt(map.get("type"));
+         int type = Integer.parseInt(map.get("action"));
         String message = "";
         if(type == 0)
         {

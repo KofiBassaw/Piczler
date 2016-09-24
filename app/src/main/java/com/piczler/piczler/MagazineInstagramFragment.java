@@ -440,7 +440,16 @@ public class MagazineInstagramFragment extends Fragment{
                 recyclerAdapter = new MagazineAdapter(OrderMagazine.instDetails,getActivity());
                 recyclerView.setAdapter(recyclerAdapter);
             }else {
-                recyclerAdapter.notifyDataSetChanged();
+                if( recyclerAdapter ==  null)
+                {
+                    System.out.println("bbbbbbbb: hmmmmmmm");
+                    recyclerAdapter = new MagazineAdapter(OrderMagazine.instDetails,getActivity());
+                    recyclerView.setAdapter(recyclerAdapter);
+                }else
+                {
+                    recyclerAdapter.notifyDataSetChanged();
+                }
+
             }
 
 

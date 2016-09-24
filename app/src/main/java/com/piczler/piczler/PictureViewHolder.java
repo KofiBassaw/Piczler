@@ -14,7 +14,6 @@ import com.andexert.library.RippleView;
 import com.androidquery.AQuery;
 import com.androidquery.callback.ImageOptions;
 import com.bumptech.glide.Glide;
-import com.trncic.library.DottedProgressBar;
 
 import org.json.JSONObject;
 

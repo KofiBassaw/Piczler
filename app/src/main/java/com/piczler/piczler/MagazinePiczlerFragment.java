@@ -431,7 +431,16 @@ public class MagazinePiczlerFragment extends Fragment{
                 recyclerAdapter = new MagazineAdapter(OrderMagazine.picDetails,getActivity());
                 recyclerView.setAdapter(recyclerAdapter);
             }else {
-                recyclerAdapter.notifyDataSetChanged();
+                if(recyclerAdapter == null)
+                {
+                    System.out.println("bbbbbbbb: hmmmmmmm");
+                    recyclerAdapter = new MagazineAdapter(OrderMagazine.picDetails,getActivity());
+                    recyclerView.setAdapter(recyclerAdapter);
+                }else
+                {
+                    recyclerAdapter.notifyDataSetChanged();
+                }
+
             }
 
 

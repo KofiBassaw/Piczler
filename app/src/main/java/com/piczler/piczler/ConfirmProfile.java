@@ -42,7 +42,6 @@ import ly.img.android.sdk.filter.ColorFilterMellow;
 import ly.img.android.sdk.filter.ColorFilterOrchid;
 import ly.img.android.sdk.filter.ColorFilterQuozi;
 import ly.img.android.sdk.filter.ColorFilterSunset;
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
 /**
  * Created by matiyas on 11/24/15.
@@ -504,6 +503,7 @@ public class ConfirmProfile extends AppCompatActivity implements View.OnClickLis
                 */
                 Intent it= new Intent(ConfirmProfile.this,VideoPlayer.class);
                 it.putExtra(StaticVariables.URL,profilePic);
+                it.putExtra("type",10);
                 startActivity(it);
                 break;
         }

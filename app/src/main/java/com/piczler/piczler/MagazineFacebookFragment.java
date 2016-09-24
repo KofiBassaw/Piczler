@@ -75,7 +75,7 @@ public class MagazineFacebookFragment extends Fragment {
 
 
         if (OrderMagazine.faceDetails.size() > 0) {
-            recyclerAdapter = new MagazineAdapter(OrderMagazine.instDetails, getActivity());
+            recyclerAdapter = new MagazineAdapter(OrderMagazine.faceDetails, getActivity());
             recyclerView.setAdapter(recyclerAdapter);
         } else {
 
@@ -148,7 +148,7 @@ public class MagazineFacebookFragment extends Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
                         // TODO Handle item click
-                        GettersAndSetters Details = OrderMagazine.instDetails.get(position);
+                        GettersAndSetters Details = OrderMagazine.faceDetails.get(position);
                         if (Details.fileType == 0) {
                             if (Details.selected) {
                                 //remove selection
@@ -270,7 +270,7 @@ public class MagazineFacebookFragment extends Fragment {
             ).executeAsync();
         } else {
             //bind data here
-            recyclerAdapter = new MagazineAdapter(OrderMagazine.instDetails, getActivity());
+            recyclerAdapter = new MagazineAdapter(OrderMagazine.faceDetails, getActivity());
             recyclerView.setAdapter(recyclerAdapter);
             pbBar.setVisibility(View.GONE);
         }

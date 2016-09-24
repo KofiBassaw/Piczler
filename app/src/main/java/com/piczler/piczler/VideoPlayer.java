@@ -41,6 +41,8 @@ public class VideoPlayer extends AppCompatActivity {
             op.targetWidth = 2000;
 
             aq.id(ivImage).image(url, op);
+        }else if(type == 10){
+            ivImage.setVisibility(View.GONE);
         }else
         {
             ivImage.setImageResource(R.drawable.audiobackground);
@@ -71,7 +73,7 @@ public class VideoPlayer extends AppCompatActivity {
                                                                 videoView.getDuration());
                                                         pbBar.setVisibility(View.GONE);
 
-                                                        if(type == 1)
+                                                        if(type == 1 || type == 10)
                                                         ivImage.setVisibility(View.GONE);
 
                                                     }
